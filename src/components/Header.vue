@@ -7,18 +7,27 @@
       <input type="text" placeholder="Arama">
     </div>
     <div class="menu navbaritem">
-      <ul class="nav">
+      <ul class="nav" v-if="AuthStore.state.isLoggedIn">
         <li><router-link to="/">Anasayfa</router-link></li>
         <li><router-link to="/listelerim">Listelerim</router-link></li>
         <li><router-link to="/favorilerim">Favorilerim</router-link></li>
+      </ul>
+      <ul class="nav" v-else>
+        <li><router-link to="/">Anasayfa</router-link></li>
+        <li><router-link to="/giris-yap">Giriş Yap</router-link></li>
       </ul>
     </div>
   </nav>
 </template>
 
 <script>
+import AuthStore from "../stores/AuthStore";
+
 export default {
   name: "Header",
+  data() {
+    return { AuthStore };
+  },
   props: {
     branding: {
       type: String,
