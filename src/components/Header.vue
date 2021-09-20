@@ -1,19 +1,16 @@
 <template>
   <nav class="navbar">
-    <div class="logo">
-      <a href="">Moviwen</a>
+    <div class="logo navbaritem">
+      <a href="" v-text="branding"></a>
     </div>
-    <div class="search">
+    <div class="search navbaritem">
       <input type="text" placeholder="Arama">
     </div>
-    <div class="menu">
+    <div class="menu navbaritem">
       <ul class="nav">
-        <li>
-          <a href="">Listeler</a>
-        </li>
-        <li>
-          <a href="">Favoriler</a>
-        </li>
+        <li><router-link to="/">Anasayfa</router-link></li>
+        <li><router-link to="/listelerim">Listelerim</router-link></li>
+        <li><router-link to="/favorilerim">Favorilerim</router-link></li>
       </ul>
     </div>
   </nav>
@@ -38,6 +35,10 @@ export default {
     justify-content: space-between;
   }
 
+  .navbaritem {
+    flex: 1;
+  }
+
   .logo a {
     text-decoration: none;
     text-align: center;
@@ -56,23 +57,42 @@ export default {
 
   .menu .nav {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     list-style: none;
   }
 
-  .nav a {
+  .nav .router-link-active.router-link-exact-active {
+    background-color: #745fc9;
+  }
+
+  .nav li a {
     color: white;
     padding: 12px 20px;
     text-decoration: none;
     border-radius: 100px;
     transition: background-color .3s ease;
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  .nav li a:visited {
+    color: white;
   }
 
   .nav a:hover {
     background-color: #8a73e7;
   }
+
+  .search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .search input {
+    background-color: rgba(255, 255, 255, 0.55);
     padding: 12px 20px;
     min-width: 300px;
     border-radius: 100px;
@@ -85,6 +105,11 @@ export default {
       41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
       100px 100px 80px rgba(0, 0, 0, 0.07)
     ;
+    transition: background-color .3s ease;
     text-align: center;
+  }
+
+  .search input:focus {
+    background-color: white;
   }
 </style>
