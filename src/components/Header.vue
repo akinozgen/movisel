@@ -11,12 +11,12 @@
         <li><router-link to="/">Anasayfa</router-link></li>
         <li><router-link to="/listelerim">Listelerim</router-link></li>
         <li><router-link to="/favorilerim">Favorilerim</router-link></li>
-        <li><router-link to="/cikis">Çıkış</router-link></li>
+        <li><router-link to="/cikis"><font-awesome-icon icon="sign-out-alt" /></router-link></li>
       </ul>
       <ul class="nav" v-else>
         <li><router-link to="/">Anasayfa</router-link></li>
-        <li><router-link to="/giris-yap">Giriş Yap</router-link></li>
         <li><router-link to="/kayit-ol">Kayıt Ol</router-link></li>
+        <li><router-link to="/giris-yap"><font-awesome-icon icon="sign-in-alt" /></router-link></li>
       </ul>
     </div>
   </nav>

@@ -8,7 +8,7 @@ export default createStore({
     mutations: {
         login(state, _userData) {
             if (typeof _userData !== 'object') return;
-            console.log(_userData)
+
             state.userData = _userData;
             state.isLoggedIn = true;
         },
