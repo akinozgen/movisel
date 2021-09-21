@@ -1,17 +1,13 @@
 export class User {
     id;
-    username;
-    password;
-    profile_picture;
-    created_at;
-    updated_at;
+    email;
+    last_sign_in_at;
+    phone;
 
     constructor(userData) {
         this.id = userData?.id;
-        this.username = userData?.username;
-        this.password = userData?.password;
-        this.profile_picture = userData?.profile_picture;
-        this.created_at = userData?.created_at;
-        this.updated_at = userData?.updated_at;
+        this.email = userData?.email;
+        this.last_sign_in_at = userData?.last_sign_in_at;
+        this.phone = userData?.phone;
     }
 }

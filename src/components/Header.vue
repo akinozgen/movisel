@@ -15,6 +15,7 @@
       <ul class="nav" v-else>
         <li><router-link to="/">Anasayfa</router-link></li>
         <li><router-link to="/giris-yap">Giriş Yap</router-link></li>
+        <li><router-link to="/kayit-ol">Kayıt Ol</router-link></li>
       </ul>
     </div>
   </nav>
