@@ -23,6 +23,7 @@
 <script>
 import AuthStore from "../stores/AuthStore";
 import SupaBase from "../stores/SupaBase";
+import router from "../router";
 
 export default {
   name: "KayitOl",
@@ -46,13 +47,14 @@ export default {
       });
 
       if (error) {
+        this.inProgress = false;
         return alert(error.message);
       }
 
       this.inProgress = false;
       this.email = '';
       this.password = '';
-      window.location = '/giris-yap';
+      await router.push('/');
     }
   }
 }

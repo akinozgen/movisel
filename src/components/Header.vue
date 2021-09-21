@@ -11,6 +11,7 @@
         <li><router-link to="/">Anasayfa</router-link></li>
         <li><router-link to="/listelerim">Listelerim</router-link></li>
         <li><router-link to="/favorilerim">Favorilerim</router-link></li>
+        <li><router-link to="/cikis">Çıkış</router-link></li>
       </ul>
       <ul class="nav" v-else>
         <li><router-link to="/">Anasayfa</router-link></li>

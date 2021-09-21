@@ -18,6 +18,10 @@ export default {
 body {
   font-family: 'Alegreya Sans', sans-serif;
   background-color: #27213f;
+  color: white;
+}
+.center {
+  text-align: center;
 }
 
 .container {

@@ -1,15 +1,15 @@
 import { createStore } from "vuex";
-import { User } from "../models/User";
 
 export default createStore({
     state: {
-        userData: {},
+        userData: null,
         isLoggedIn: false
     },
     mutations: {
-        login(state, { userData }) {
-            if (typeof userData !== 'object') return;
-            state.userData = new User(userData);
+        login(state, _userData) {
+            if (typeof _userData !== 'object') return;
+            console.log(_userData)
+            state.userData = _userData;
             state.isLoggedIn = true;
         },
 
