@@ -1,5 +1,5 @@
 <template>
-  <Header branding="Moviwen" />
+  <Header v-bind:branding="appName" />
   <router-view/>
 </template>
 
@@ -8,6 +8,11 @@ import Header from "./components/Header";
 
 export default {
   name: 'Moviwen',
+  data() {
+    return {
+      appName: 'Moviwen'
+    }
+  },
   components: {
     Header
   }
