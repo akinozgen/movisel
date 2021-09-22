@@ -86,4 +86,10 @@ body {
   cursor: unset;
   pointer-events: none;
 }
+
+.container .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 </style>

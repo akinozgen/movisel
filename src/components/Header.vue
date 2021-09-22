@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="logo navbaritem">
-      <a href="" v-text="branding"></a>
+      <a href="" @click="gotoHomePage" v-text="branding"></a>
     </div>
     <div class="search navbaritem">
       <input type="text" placeholder="Arama">
@@ -24,11 +24,17 @@
 
 <script>
 import AuthStore from "../stores/AuthStore";
+import router from "../router";
 
 export default {
   name: "Header",
   data() {
     return { AuthStore };
+  },
+  methods: {
+    gotoHomePage() {
+      router.push('/');
+    }
   },
   props: {
     branding: {

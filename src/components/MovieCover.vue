@@ -1,5 +1,5 @@
 <template>
-  <div class="movie-cover">
+  <div class="movie-cover" @click="gotoDetailPage">
     <div class="front-content">
       <button class="add-to-fav" @click="addToFavs" v-if="!movieData?.isFav">
         <font-awesome-icon icon="star-half-alt" />
@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="back-content">
-      <img v-bind:src="movieData?.poster_url" alt="">
+      <div class="img" v-bind:style="{ backgroundImage: `url(${movieData?.poster_url})` }"></div>
     </div>
     <h3 class="title" v-text="movieData?.title"></h3>
     <div class="description">
@@ -26,6 +26,7 @@
 
 <script>
 import AuthStore from "@/stores/AuthStore";
+import router from "../router";
 
 export default {
   data() {
@@ -37,7 +38,10 @@ export default {
   methods: {
     addToFavs() {},
     removeFromFavs() {},
-    addToList() {}
+    addToList() {},
+    gotoDetailPage() {
+      router.push(`/film-detay/${this.movieData.id}`);
+    }
   },
   name: "MovieCover"
 }
@@ -45,15 +49,21 @@ export default {
 
 <style scoped>
   button.add-to-fav {
-    background: transparent;
     border: 0;
-    margin: 0;
     padding: 0.5em;
     color: white;
     cursor: pointer;
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    margin: 0.2em;
   }
 
   .movie-cover {
+    cursor: pointer;
     flex: 0 0 calc(100% * (1/5) - 0px - 1px);
     position: relative;
     margin: 0 1em 5em 1em;
@@ -62,24 +72,43 @@ export default {
     border-radius: 10px;
     padding-bottom: 1em;
     box-shadow:
-      2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
-      6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
-      12.5px 12.5px 10px rgba(0, 0, 0, 0.035),
-      22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
-      41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
-      100px 100px 80px rgba(0, 0, 0, 0.07)
+      0 5.4px 8.5px -16px rgba(0, 0, 0, 0.03),
+      0 10.3px 15.6px -16px rgba(0, 0, 0, 0.037),
+      0 15.3px 21.8px -16px rgba(0, 0, 0, 0.041),
+      0 22.6px 28.9px -16px rgba(0, 0, 0, 0.049),
+      0 48px 58px -16px rgba(0, 0, 0, 0.07)
+    ;
+    transition: all .3s ease-in-out;
+  }
+
+  .movie-cover:hover {
+    transform: scale(1.05);
+    box-shadow:
+      5.3px 6.8px 4.7px -11px rgba(0, 0, 0, 0.017),
+      10.4px 13.2px 10.8px -11px rgba(0, 0, 0, 0.021),
+      15.4px 19.6px 19.4px -11px rgba(0, 0, 0, 0.02),
+      20.7px 26.4px 32.3px -11px rgba(0, 0, 0, 0.024),
+      27.5px 35.1px 53.2px -11px rgba(0, 0, 0, 0.04),
+      39.3px 50.2px 92.9px -11px rgba(0, 0, 0, 0.07),
+      76px 97px 201px -11px rgba(0, 0, 0, 0.11)
     ;
   }
 
   .movie-cover .front-content {
     position: absolute;
+    min-height: 10em;
     top: 0;
     left: 0;
     right: 0;
   }
 
-  .movie-cover .back-content img {
+  .movie-cover .back-content .img {
     width: 100%;
+    height: 24.5em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #8a73e7;
   }
 
   .movie-cover .description {

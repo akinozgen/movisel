@@ -1,6 +1,23 @@
 <template>
   <div class="container">
-    <h1 class="page-title">Vizyondaki Popüler Filmler</h1>
+    <div class="header">
+      <div class="pagination small">
+        <button
+            class="paginate prev"
+            v-bind:class="{ disabled: page === 1 || isLoading }"
+            @click="prevPage">
+          <font-awesome-icon icon="caret-left"/>
+        </button>
+        <span v-text="page" class="active-page" @click="firstPage"></span>
+        <button
+            class="paginate next"
+            @click="nextPage"
+            v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page || isLoading }">
+          <font-awesome-icon icon="caret-right"/>
+        </button>
+      </div>
+      <h1 class="page-title">Vizyondaki Popüler Filmler</h1>
+    </div>
     <div class="grid">
       <MovieCover
           v-bind:movie-data="movieData"
@@ -8,11 +25,17 @@
           :key="movieData.id" />
     </div>
     <div class="pagination">
-      <button class="paginate prev" v-bind:class="{ disabled: page === 1 }" @click="prevPage">
+      <button
+          class="paginate prev"
+          v-bind:class="{ disabled: page === 1 || isLoading }"
+          @click="prevPage">
         <font-awesome-icon icon="caret-left"/> Daha Eski
       </button>
       <span v-text="page" class="active-page" @click="firstPage"></span>
-      <button class="paginate next" @click="nextPage" v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page }">
+      <button
+          class="paginate next"
+          @click="nextPage"
+          v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page || isLoading }">
         Daha Yeni <font-awesome-icon icon="caret-right"/>
       </button>
     </div>
@@ -26,33 +49,41 @@ import MovieCover from "../components/MovieCover";
 export default {
   name: "Anasayfa",
   data() {
-    return { TMDBStore, page: 1 };
+    return { TMDBStore, page: 1, isLoading: true };
   },
   methods: {
-    nextPage() {
+    async nextPage() {
       if (this.page === TMDBStore.state.showcaseMaxPages) return;
+      this.isLoading = true;
       this.page++;
-      this.loadShowcaseMovies();
+      await this.loadShowcaseMovies();
+      this.isLoading = false;
     },
-    prevPage() {
+    async prevPage() {
       if (this.page === 1) return;
+      this.isLoading = true;
       this.page--;
-      this.loadShowcaseMovies();
+      await this.loadShowcaseMovies();
+      this.isLoading = false;
     },
-    firstPage() {
+    async firstPage() {
+      this.isLoading = true;
       this.page = 1;
-      this.loadShowcaseMovies();
+      await this.loadShowcaseMovies();
+      this.isLoading = false;
     },
-    loadShowcaseMovies() {
-      TMDBStore.commit('loadShowcaseMovies', {
+    async loadShowcaseMovies() {
+      await TMDBStore.commit('loadShowcaseMovies', {
         page: this.page
       });
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   },
   components: {MovieCover},
   mounted() {
     this.loadShowcaseMovies();
+    this.isLoading = false;
   }
 }
 </script>
@@ -61,7 +92,7 @@ export default {
   .grid {
     display: flex;
     align-items: flex-start;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-direction: row;
     flex-wrap: wrap;
   }
@@ -76,14 +107,14 @@ export default {
   .paginate {
     font-size: 20px;
     height: 4rem;
-    border-radius: 100px;
     padding: 0 2em;
+    margin: 0 1em;
+    border-radius: 100px;
     border: 0;
     background-color: #8a73e7;
     cursor: pointer;
 
     color: white;
-    margin: 0 1em;
   }
 
   .paginate.disabled {
@@ -93,16 +124,37 @@ export default {
   }
 
   .pagination .active-page {
-    border: 2px solid #8a73e7;
+    font-size: 1.5em;
     width: 3rem;
     height: 3rem;
+    border: 2px solid #8a73e7;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5em;
     text-align: center;
     border-radius: 100px;
     cursor: pointer;
+  }
+
+  .pagination.small {
+    margin-bottom: 0;
+  }
+
+  .pagination.small .paginate {
+    font-size: 1.2em;
+    height: 2rem;
+    padding: 0 0.5em;
+    margin: 0 1em;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pagination.small .active-page {
+    font-size: 1em;
+    width: 2rem;
+    height: 2rem;
   }
 
 </style>
