@@ -10,6 +10,7 @@ import {
     faStarHalfAlt,
     faPlusSquare
 } from '@fortawesome/free-solid-svg-icons';
+import TMDBStore from "@/stores/TMDBStore";
 
 library.add(
     faSignOutAlt,
@@ -23,3 +24,5 @@ createApp(App)
     .use(router)
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app');
+
+TMDBStore.commit('authenticate');
