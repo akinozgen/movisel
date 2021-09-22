@@ -40,9 +40,16 @@ export default createStore({
             }
 
             const sessionRes = await fetch(`${apiEndpoint}/authentication/session/new?api_key=${state.apiKey}&request_token=${state.requestToken}`, {
-                method: 'POST'
+                method: 'GET'
             }).then(res => res.json());
             if (String(sessionRes?.session_id).length === 0) return;
+
+            state.sessionId = sessionRes.session_id;
+            localStorage.setItem('session_id', state.sessionId);
+
+            // saat farkından 3 saat eklemek istiyor.
+            const expiration = Date.parse(sessionRes.expires_at.replace(' UTC', '')) + ((60*60)*3000);
+            localStorage.setItem('session_expiry', expiration.toString());
         },
         loadShowcaseMovies(state) {
             console.log(state)
