@@ -7,7 +7,8 @@ export default createStore({
         showcaseMovies: [],
         apiKey: process.env.VUE_APP_TMDB_API_KEY,
         requestToken: '',
-        sessionId: ''
+        sessionId: '',
+        showcaseMaxPages: 1
     },
     mutations: {
         async authenticate(state) {
@@ -57,6 +58,7 @@ export default createStore({
                 .then(res => res.json());
             if (!Array.isArray(popRes?.results)) return;
 
+            state.showcaseMaxPages = parseInt(popRes.total_pages);
             state.showcaseMovies = popRes.results.map(m => ({
                 id: m.id,
                 title: m.title,

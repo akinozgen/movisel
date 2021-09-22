@@ -8,7 +8,9 @@ import {
     faSignInAlt,
     faStar,
     faStarHalfAlt,
-    faPlusSquare
+    faPlusSquare,
+    faCaretLeft,
+    faCaretRight
 } from '@fortawesome/free-solid-svg-icons';
 import TMDBStore from "@/stores/TMDBStore";
 
@@ -17,7 +19,9 @@ library.add(
     faSignInAlt,
     faStar,
     faStarHalfAlt,
-    faPlusSquare
+    faPlusSquare,
+    faCaretLeft,
+    faCaretRight
 );
 
 createApp(App)
