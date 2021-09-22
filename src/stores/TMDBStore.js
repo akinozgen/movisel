@@ -52,8 +52,18 @@ export default createStore({
             const expiration = Date.parse(sessionRes.expires_at.replace(' UTC', '')) + ((60*60)*3000);
             localStorage.setItem('session_expiry', expiration.toString());
         },
-        loadShowcaseMovies(state) {
-            console.log(state)
+        async loadShowcaseMovies(state, {page}) {
+            const popRes = await fetch(`${apiEndpoint}/movie/popular?api_key=${state.apiKey}&language=tr-TR&page=${page}`)
+                .then(res => res.json());
+            if (!Array.isArray(popRes?.results)) return;
+
+            state.showcaseMovies = popRes.results.map(m => ({
+                id: m.id,
+                title: m.title,
+                decimal_rating: m.vote_average,
+                release_date: m.release_date,
+                poster_url: `https://image.tmdb.org/t/p/original/${m.poster_path}`
+            }));
         }
     }
 });
