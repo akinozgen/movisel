@@ -5,12 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faSignOutAlt,
-    faSignInAlt
+    faSignInAlt,
+    faStar,
+    faStarHalfAlt,
+    faPlusSquare
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faSignOutAlt,
-    faSignInAlt
+    faSignInAlt,
+    faStar,
+    faStarHalfAlt,
+    faPlusSquare
 );
 
 createApp(App)
