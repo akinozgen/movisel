@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
+      <h1 class="page-title">Vizyondaki Popüler Filmler</h1>
       <div class="pagination small">
         <button
             class="paginate prev"
@@ -16,7 +17,6 @@
           <font-awesome-icon icon="caret-right"/>
         </button>
       </div>
-      <h1 class="page-title">Vizyondaki Popüler Filmler</h1>
     </div>
     <div class="grid">
       <MovieCover
@@ -82,8 +82,9 @@ export default {
   },
   components: {MovieCover},
   mounted() {
-    this.loadShowcaseMovies();
     this.isLoading = false;
+    if (TMDBStore.state.showcaseMovies.length > 0) return;
+    this.loadShowcaseMovies();
   }
 }
 </script>

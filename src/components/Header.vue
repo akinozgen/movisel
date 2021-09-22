@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="logo navbaritem">
-      <a href="" @click="gotoHomePage" v-text="branding"></a>
+      <a href="javascript:void(0)" @click="gotoHomePage" v-text="branding"></a>
     </div>
     <div class="search navbaritem">
       <input type="text" placeholder="Arama">

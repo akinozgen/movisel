@@ -1,22 +1,22 @@
 <template>
-  <div class="movie-cover" @click="gotoDetailPage">
+  <div class="movie-cover">
     <div class="front-content">
-      <button class="add-to-fav" @click="addToFavs" v-if="!movieData?.isFav">
+      <button class="add-to-fav" @click.prevent="addToFavs" v-if="!movieData?.isFav">
         <font-awesome-icon icon="star-half-alt" />
       </button>
-      <button class="add-to-fav" @click="removeFromFavs" v-else>
+      <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
         <font-awesome-icon icon="star" />
       </button>
     </div>
-    <div class="back-content">
+    <div class="back-content" @click="gotoDetailPage">
       <div class="img" v-bind:style="{ backgroundImage: `url(${movieData?.poster_url})` }"></div>
     </div>
     <h3 class="title" v-text="movieData?.title"></h3>
-    <div class="description">
+    <div class="description"  @click="gotoDetailPage">
       <span class="date" v-text="movieData?.release_date"></span>
       <span class="rating"><span v-text="movieData?.decimal_rating"></span>/10</span>
     </div>
-    <div class="actions" v-if="AuthStore.state.isLoggedIn">
+    <div class="actions" v-if="AuthStore.state.isLoggedIn"  @click="gotoDetailPage">
       <a href="javascript:void(0)" class="add-to-list" @click="addToList">
         <font-awesome-icon icon="plus-square" /> Listeye Ekle
       </a>
@@ -96,7 +96,6 @@ export default {
 
   .movie-cover .front-content {
     position: absolute;
-    min-height: 10em;
     top: 0;
     left: 0;
     right: 0;
