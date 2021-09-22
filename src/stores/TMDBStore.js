@@ -21,7 +21,7 @@ export default createStore({
 
             const tokenRes = await fetch(`${apiEndpoint}/authentication/token/new?api_key=${state.apiKey}`)
                 .then(res => res.json());
-            if (String(tokenRes?.request_token).length === 0) return;
+            if (String(tokenRes?.request_token) === "undefined") return;
 
             state.requestToken = tokenRes.request_token;
             localStorage.setItem('request_token', state.requestToken);
@@ -42,7 +42,8 @@ export default createStore({
             const sessionRes = await fetch(`${apiEndpoint}/authentication/session/new?api_key=${state.apiKey}&request_token=${state.requestToken}`, {
                 method: 'GET'
             }).then(res => res.json());
-            if (String(sessionRes?.session_id).length === 0) return;
+
+            if (String(sessionRes?.session_id) === "undefined") return;
 
             state.sessionId = sessionRes.session_id;
             localStorage.setItem('session_id', state.sessionId);

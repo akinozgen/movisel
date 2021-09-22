@@ -21,7 +21,7 @@ export default {
   },
   components: {MovieCover},
   mounted() {
-    console.log(TMDBStore);
+    TMDBStore.commit('loadShowcaseMovies');
   }
 }
 </script>
