@@ -11,6 +11,7 @@
       <button class="paginate prev" v-bind:class="{ disabled: page === 1 }" @click="prevPage">
         <font-awesome-icon icon="caret-left"/> Daha Eski
       </button>
+      <span v-text="page" class="active-page" @click="firstPage"></span>
       <button class="paginate next" @click="nextPage" v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page }">
         Daha Yeni <font-awesome-icon icon="caret-right"/>
       </button>
@@ -38,10 +39,15 @@ export default {
       this.page--;
       this.loadShowcaseMovies();
     },
+    firstPage() {
+      this.page = 1;
+      this.loadShowcaseMovies();
+    },
     loadShowcaseMovies() {
       TMDBStore.commit('loadShowcaseMovies', {
         page: this.page
       });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   },
   components: {MovieCover},
@@ -77,6 +83,7 @@ export default {
     cursor: pointer;
 
     color: white;
+    margin: 0 1em;
   }
 
   .paginate.disabled {
@@ -85,7 +92,17 @@ export default {
     opacity: 0.5;
   }
 
-  .paginate.prev {
-    margin-right: 2em;
+  .pagination .active-page {
+    border: 2px solid #8a73e7;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    text-align: center;
+    border-radius: 100px;
+    cursor: pointer;
   }
+
 </style>
