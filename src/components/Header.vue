@@ -4,7 +4,7 @@
       <a href="javascript:void(0)" @click="gotoHomePage" v-text="branding"></a>
     </div>
     <div class="search navbaritem">
-      <input type="text" placeholder="Arama">
+      <SearchBar />
     </div>
     <div class="menu navbaritem">
       <ul class="nav" v-if="AuthStore.state.isLoggedIn">
@@ -25,9 +25,11 @@
 <script>
 import AuthStore from "../stores/AuthStore";
 import router from "../router";
+import SearchBar from "./SearchBar";
 
 export default {
   name: "Header",
+  components: {SearchBar},
   data() {
     return { AuthStore };
   },
@@ -100,33 +102,5 @@ export default {
 
   .nav a:hover {
     background-color: #8a73e7;
-  }
-
-  .search {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .search input {
-    background-color: rgba(255, 255, 255, 0.55);
-    padding: 12px 20px;
-    min-width: 300px;
-    border-radius: 100px;
-    border: 0;
-    box-shadow: inset
-      2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
-      6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
-      12.5px 12.5px 10px rgba(0, 0, 0, 0.035),
-      22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
-      41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
-      100px 100px 80px rgba(0, 0, 0, 0.07)
-    ;
-    transition: background-color .3s ease;
-    text-align: center;
-  }
-
-  .search input:focus {
-    background-color: white;
   }
 </style>
