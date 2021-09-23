@@ -8,7 +8,8 @@ export default createStore({
         apiKey: process.env.VUE_APP_TMDB_API_KEY,
         requestToken: '',
         sessionId: '',
-        showcaseMaxPages: 1
+        showcaseMaxPages: 1,
+        activePage: 1
     },
     mutations: {
         async authenticate(state) {

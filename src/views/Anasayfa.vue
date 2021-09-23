@@ -5,15 +5,15 @@
       <div class="pagination small">
         <button
             class="paginate prev"
-            v-bind:class="{ disabled: page === 1 || isLoading }"
+            v-bind:class="{ disabled: TMDBStore.state.activePage === 1 || isLoading }"
             @click="prevPage">
           <font-awesome-icon icon="caret-left"/>
         </button>
-        <span v-text="page" class="active-page" @click="firstPage"></span>
+        <span v-text="TMDBStore.state.activePage" class="active-page" @click="firstPage"></span>
         <button
             class="paginate next"
             @click="nextPage"
-            v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page || isLoading }">
+            v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === TMDBStore.state.activePage || isLoading }">
           <font-awesome-icon icon="caret-right"/>
         </button>
       </div>
@@ -27,15 +27,15 @@
     <div class="pagination">
       <button
           class="paginate prev"
-          v-bind:class="{ disabled: page === 1 || isLoading }"
+          v-bind:class="{ disabled: TMDBStore.state.activePage === 1 || isLoading }"
           @click="prevPage">
         <font-awesome-icon icon="caret-left"/> Daha Eski
       </button>
-      <span v-text="page" class="active-page" @click="firstPage"></span>
+      <span v-text="TMDBStore.state.activePage" class="active-page" @click="firstPage"></span>
       <button
           class="paginate next"
           @click="nextPage"
-          v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === page || isLoading }">
+          v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === TMDBStore.state.activePage || isLoading }">
         Daha Yeni <font-awesome-icon icon="caret-right"/>
       </button>
     </div>
@@ -49,32 +49,32 @@ import MovieCover from "../components/MovieCover";
 export default {
   name: "Anasayfa",
   data() {
-    return { TMDBStore, page: 1, isLoading: true };
+    return { TMDBStore, isLoading: true };
   },
   methods: {
     async nextPage() {
-      if (this.page === TMDBStore.state.showcaseMaxPages) return;
+      if (this.TMDBStore.state.activePage === TMDBStore.state.showcaseMaxPages) return;
       this.isLoading = true;
-      this.page++;
+      this.TMDBStore.state.activePage++;
       await this.loadShowcaseMovies();
       this.isLoading = false;
     },
     async prevPage() {
-      if (this.page === 1) return;
+      if (this.TMDBStore.state.activePage === 1) return;
       this.isLoading = true;
-      this.page--;
+      this.TMDBStore.state.activePage--;
       await this.loadShowcaseMovies();
       this.isLoading = false;
     },
     async firstPage() {
       this.isLoading = true;
-      this.page = 1;
+      this.TMDBStore.state.activePage = 1;
       await this.loadShowcaseMovies();
       this.isLoading = false;
     },
     async loadShowcaseMovies() {
       await TMDBStore.commit('loadShowcaseMovies', {
-        page: this.page
+        page: this.TMDBStore.state.activePage
       });
 
       window.scrollTo({ top: 0, behavior: "smooth" });

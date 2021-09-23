@@ -67,7 +67,7 @@ export default {
     flex: 0 0 calc(100% * (1/5) - 0px - 1px);
     position: relative;
     margin: 0 1em 5em 1em;
-    height: 32  em;
+    height: 32em;
     overflow: hidden;
     border-radius: 10px;
     padding-bottom: 1em;
