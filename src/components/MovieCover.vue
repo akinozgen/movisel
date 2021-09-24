@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="back-content" @click="gotoDetailPage">
-      <div class="img" v-bind:style="{ backgroundImage: `url(${movieData?.poster_url})` }"></div>
+      <v-lazy-image v-bind:src="movieData?.poster_url" />
     </div>
     <h3 class="title" v-text="movieData?.title"></h3>
     <div class="description"  @click="gotoDetailPage">
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import AuthStore from "@/stores/AuthStore";
+import vLazyImage from 'v-lazy-image';
+import AuthStore from "../stores/AuthStore";
 import router from "../router";
 
 export default {
@@ -43,7 +44,8 @@ export default {
       router.push(`/film-detay/${this.movieData.id}`);
     }
   },
-  name: "MovieCover"
+  name: "MovieCover",
+  components: { vLazyImage }
 }
 </script>
 
@@ -101,13 +103,13 @@ export default {
     right: 0;
   }
 
-  .movie-cover .back-content .img {
+  .movie-cover .back-content .v-lazy-image {
     width: 100%;
     height: 24.5em;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: #8a73e7;
+    background-image: linear-gradient(to right, #41295a, #2f0743);
   }
 
   .movie-cover .description {
