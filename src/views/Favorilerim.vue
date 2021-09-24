@@ -3,8 +3,19 @@
 </template>
 
 <script>
+import AuthStore from "../stores/AuthStore";
+import router from "../router";
+
 export default {
-  name: "Favorilerim"
+  name: "Favorilerim",
+  data() {
+    return { AuthStore };
+  },
+  mounted() {
+    if (!AuthStore.state.isLoggedIn) {
+      return router.push('/');
+    }
+  }
 }
 </script>
 
