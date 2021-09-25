@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <div class="header">
-      <h1 class="page-title">Vizyondaki Popüler Filmler</h1>
+      <h1 class="page-title">
+        Vizyondaki Popüler
+        <select v-model="type" v-on:change="changeType" class="type-select-header">
+          <option :selected="type === 'movie'" v-bind:value="'movie'" :key="1">Filmler</option>
+          <option :selected="type === 'tv'" v-bind:value="'tv'" :key="2">Diziler</option>
+        </select>
+      </h1>
       <div class="pagination small">
         <button
             class="paginate prev"
@@ -49,7 +55,7 @@ import MovieCover from "../components/MovieCover";
 export default {
   name: "Anasayfa",
   data() {
-    return { TMDBStore, isLoading: true };
+    return { TMDBStore, isLoading: true, type: 'movie' };
   },
   methods: {
     async nextPage() {
@@ -74,10 +80,14 @@ export default {
     },
     async loadShowcaseMovies() {
       await TMDBStore.commit('loadShowcaseMovies', {
-        page: this.TMDBStore.state.activePage
+        page: this.TMDBStore.state.activePage,
+        type: this.type
       });
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    async changeType() {
+      await this.loadShowcaseMovies();
     }
   },
   components: {MovieCover},
@@ -156,6 +166,23 @@ export default {
     font-size: 1em;
     width: 2rem;
     height: 2rem;
+  }
+
+  .type-select-header {
+    font-size: 1em;
+    border: 0;
+    background-color: transparent;
+    color: white;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 600;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border-bottom: 2px solid #8a73e7;
+    padding: 0 .5em;
+  }
+
+  .type-select-header::-ms-expand {
+    display: none;
   }
 
 </style>

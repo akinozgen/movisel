@@ -56,17 +56,17 @@ export default createStore({
             const expiration = Date.parse(sessionRes.expires_at.replace(' UTC', '')) + ((60*60)*3000);
             localStorage.setItem('session_expiry', expiration.toString());
         },
-        async loadShowcaseMovies(state, {page}) {
-            const popRes = await fetch(`${apiEndpoint}/movie/popular?api_key=${state.apiKey}&language=tr-TR&page=${page}`)
+        async loadShowcaseMovies(state, {page, type}) {
+            const popRes = await fetch(`${apiEndpoint}/${type}/popular?api_key=${state.apiKey}&language=tr-TR&page=${page}`)
                 .then(res => res.json());
             if (!Array.isArray(popRes?.results)) return;
 
             state.showcaseMaxPages = parseInt(popRes.total_pages);
             state.showcaseMovies = popRes.results.map(m => ({
                 id: m.id,
-                title: m.title,
+                title: type === 'movie' ? m.title : m.name,
                 decimal_rating: m.vote_average,
-                release_date: m.release_date,
+                release_date: type === 'movie' ? m.release_date : m.first_air_date,
                 poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`
             }));
         },
