@@ -75,8 +75,14 @@ export default createStore({
 
             if (String(movRes?.id) !== String(id)) return;
 
-            movRes.backgrop_path = `https://image.tmdb.org/t/p/original/${movRes.backgrop_path}`;
+            movRes.backdrop_path = `https://image.tmdb.org/t/p/original/${movRes.backdrop_path}`;
             movRes.poster_path = `https://image.tmdb.org/t/p/original/${movRes.poster_path}`;
+            movRes.production_companies = movRes.production_companies.map((c) => {
+                if (!c.logo_path) return c;
+
+                c.logo_path = `https://image.tmdb.org/t/p/original/${c.logo_path}`;
+                return c;
+            });
             state.currentMovieDetail = movRes;
             console.log(movRes.poster_path)
         }

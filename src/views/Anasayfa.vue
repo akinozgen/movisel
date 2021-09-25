@@ -29,14 +29,14 @@
           class="paginate prev"
           v-bind:class="{ disabled: TMDBStore.state.activePage === 1 || isLoading }"
           @click="prevPage">
-        <font-awesome-icon icon="caret-left"/> Daha Eski
+        <font-awesome-icon icon="caret-left"/> Daha Yeni
       </button>
       <span v-text="TMDBStore.state.activePage" class="active-page" @click="firstPage"></span>
       <button
           class="paginate next"
           @click="nextPage"
           v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === TMDBStore.state.activePage || isLoading }">
-        Daha Yeni <font-awesome-icon icon="caret-right"/>
+        Daha Eski <font-awesome-icon icon="caret-right"/>
       </button>
     </div>
   </div>
