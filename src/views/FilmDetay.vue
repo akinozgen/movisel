@@ -74,6 +74,7 @@ export default {
     };
   },
   async mounted() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     this.movieId = this.$route.params.id;
     await this.getMovieData();
   },
@@ -109,17 +110,25 @@ export default {
   width: 100vw;
   height: 100%;
   z-index: -1;
+  opacity: .5;
 }
 
 .movie-detail {
   margin-top: 5em;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
 }
 
+.movie-detail .left, .movie-detail .right {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .movie-detail .left img {
-  width: 100%;
+  width: 90%;
   border-radius: 10px;
   box-shadow:
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
@@ -127,8 +136,7 @@ export default {
     12.5px 12.5px 10px rgba(0, 0, 0, 0.035),
     22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
     41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
-    100px 100px 80px rgba(0, 0, 0, 0.07)
-  ;
+    100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 
 .flex-4 {
