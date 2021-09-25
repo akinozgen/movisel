@@ -9,7 +9,8 @@ export default createStore({
         requestToken: '',
         sessionId: '',
         showcaseMaxPages: 1,
-        activePage: 1
+        activePage: 1,
+        currentMovieDetail: null
     },
     mutations: {
         async authenticate(state) {
@@ -67,6 +68,17 @@ export default createStore({
                 release_date: m.release_date,
                 poster_url: `https://image.tmdb.org/t/p/original/${m.poster_path}`
             }));
+        },
+        async getMovieData(state, {id}) {
+            const movRes = await fetch(`${apiEndpoint}/movie/${id}?api_key=${state.apiKey}&language=tr-TR&`)
+            .then(res => res.json());
+
+            if (String(movRes?.id) !== String(id)) return;
+
+            movRes.backgrop_path = `https://image.tmdb.org/t/p/original/${movRes.backgrop_path}`;
+            movRes.poster_path = `https://image.tmdb.org/t/p/original/${movRes.poster_path}`;
+            state.currentMovieDetail = movRes;
+            console.log(movRes.poster_path)
         }
     }
 });

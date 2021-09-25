@@ -16,7 +16,7 @@
       <span class="date" v-text="movieData?.release_date"></span>
       <span class="rating"><span v-text="movieData?.decimal_rating"></span>/10</span>
     </div>
-    <div class="actions" v-if="AuthStore.state.isLoggedIn"  @click="gotoDetailPage">
+    <div class="actions" v-if="AuthStore.state.isLoggedIn">
       <a href="javascript:void(0)" class="add-to-list" @click="addToList">
         <font-awesome-icon icon="plus-square" /> Listeye Ekle
       </a>
