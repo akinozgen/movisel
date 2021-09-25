@@ -6,21 +6,27 @@
         <v-lazy-image v-bind:src="TMDBStore.state.currentMovieDetail?.poster_path" />
       </div>
       <div class="right flex-8">
-        <span class="status" v-text="TMDBStore.state.currentMovieDetail?.status"></span>
-        <span class="release_date" v-text="TMDBStore.state.currentMovieDetail?.release_date"></span>
-        <span class="rating" v-text="TMDBStore.state.currentMovieDetail?.vote_average"></span>
-        <h1 class="title" v-text="TMDBStore.state.currentMovieDetail?.title"></h1>
-        <h3 class="tagline" v-text="TMDBStore.state.currentMovieDetail?.tagline"></h3>
-        <p class="overview" v-text="TMDBStore.state.currentMovieDetail?.overview"></p>
-        <p class="runtime" v-text="TMDBStore.state.currentMovieDetail?.runtime"></p>
-        <a target="_blank" v-bind:href="TMDBStore.state.currentMovieDetail?.homepage" class="homepage">
-          Web Sitesi
-        </a>
-        <a target="_blank"
-           v-bind:href="`https://www.imdb.com/title/${TMDBStore.state.currentMovieDetail?.imdb_id}`"
-           class="imdb">
-          IMDB
-        </a>
+        <div class="top-details">
+          <span class="status" v-text="TMDBStore.state.currentMovieDetail?.status"></span>
+          <span class="release_date" v-text="TMDBStore.state.currentMovieDetail?.release_date"></span>
+          <span class="rating" v-text="TMDBStore.state.currentMovieDetail?.vote_average"></span>
+        </div>
+        <div class="details">
+          <h1 class="title" v-text="TMDBStore.state.currentMovieDetail?.title"></h1>
+          <h3 class="tagline" v-text="TMDBStore.state.currentMovieDetail?.tagline"></h3>
+          <p class="overview" v-text="TMDBStore.state.currentMovieDetail?.overview"></p>
+          <p class="runtime" v-text="TMDBStore.state.currentMovieDetail?.runtime"></p>
+        </div>
+        <div class="link">
+          <a target="_blank" v-bind:href="TMDBStore.state.currentMovieDetail?.homepage" class="homepage">
+            Web Sitesi
+          </a>
+          <a target="_blank"
+             v-bind:href="`https://www.imdb.com/title/${TMDBStore.state.currentMovieDetail?.imdb_id}`"
+             class="imdb">
+            IMDB
+          </a>
+        </div>
         <div class="genres">
           <h4 class="genres-title">Türler</h4>
           <ul class="genres-list">
@@ -40,29 +46,43 @@
         </div>
       </div>
     </div>
+    <div class="cast">
+      <h1 class="cast-title">Kadro</h1>
+      <carousel snap-align="center" items-to-show="5.5">
+        <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
+          <Cast v-bind:cast="cast" />
+        </slide>
+      </carousel>
+    </div>
   </div>
 </template>
 
 <script>
 import vLazyImage from 'v-lazy-image';
+import { Carousel, Slide } from 'vue3-carousel';
 import TMDBStore from "../stores/TMDBStore";
+import Cast from "../components/Cast";
+import 'vue3-carousel/dist/carousel.css';
 
 export default {
   name: "FilmDetay",
-  components: {vLazyImage},
+  components: { vLazyImage, Carousel, Slide, Cast },
   data() {
     return {
       movieId: 0,
       TMDBStore
     };
   },
-  mounted() {
+  async mounted() {
     this.movieId = this.$route.params.id;
-    this.getMovieData();
+    await this.getMovieData();
   },
   methods: {
     async getMovieData() {
       TMDBStore.commit('getMovieData', {
+        id: this.movieId
+      });
+      TMDBStore.commit('getMovieCredits', {
         id: this.movieId
       });
     }
@@ -71,6 +91,11 @@ export default {
 </script>
 
 <style scoped>
+.cast {
+  margin-top: 10em;
+  margin-bottom: 20em;
+}
+
 .backdrop {
   position: absolute;
   top: 0;
@@ -113,4 +138,5 @@ export default {
 .flex-8 {
   flex: 8;
 }
+
 </style>

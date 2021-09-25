@@ -10,7 +10,8 @@ export default createStore({
         sessionId: '',
         showcaseMaxPages: 1,
         activePage: 1,
-        currentMovieDetail: null
+        currentMovieDetail: null,
+        movieCredits: []
     },
     mutations: {
         async authenticate(state) {
@@ -66,7 +67,7 @@ export default createStore({
                 title: m.title,
                 decimal_rating: m.vote_average,
                 release_date: m.release_date,
-                poster_url: `https://image.tmdb.org/t/p/original/${m.poster_path}`
+                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`
             }));
         },
         async getMovieData(state, {id}) {
@@ -76,15 +77,27 @@ export default createStore({
             if (String(movRes?.id) !== String(id)) return;
 
             movRes.backdrop_path = `https://image.tmdb.org/t/p/original/${movRes.backdrop_path}`;
-            movRes.poster_path = `https://image.tmdb.org/t/p/original/${movRes.poster_path}`;
+            movRes.poster_path = `https://image.tmdb.org/t/p/w780/${movRes.poster_path}`;
             movRes.production_companies = movRes.production_companies.map((c) => {
                 if (!c.logo_path) return c;
 
-                c.logo_path = `https://image.tmdb.org/t/p/original/${c.logo_path}`;
+                c.logo_path = `https://image.tmdb.org/t/p/w185/${c.logo_path}`;
                 return c;
             });
             state.currentMovieDetail = movRes;
             console.log(movRes.poster_path)
+        },
+        async getMovieCredits(state, { id }) {
+            console.log(state, id);
+            const crdRes = await fetch(`${apiEndpoint}/movie/${id}/credits?api_key=${state.apiKey}&language=tr-TR&`)
+            .then(res => res.json());
+
+            if (!Array.isArray(crdRes?.cast)) return;
+
+            state.movieCredits[ id ] = crdRes.cast.filter(c => c?.profile_path != null).map(c => {
+                c.profile_path = `https://image.tmdb.org/t/p/h632/${c.profile_path}`;
+                return c;
+            });
         }
     }
 });
