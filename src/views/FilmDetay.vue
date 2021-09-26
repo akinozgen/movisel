@@ -7,9 +7,16 @@
       </div>
       <div class="right flex-8">
         <div class="top-details">
-          <span class="status" v-text="TMDBStore.state.currentMovieDetail?.status"></span>
-          <span class="release_date" v-text="TMDBStore.state.currentMovieDetail?.release_date"></span>
-          <span class="rating" v-text="TMDBStore.state.currentMovieDetail?.vote_average"></span>
+
+          <span class="status"
+                v-bind:style="{ backgroundColor: tmdbMovieStatuses[TMDBStore.state.currentMovieDetail?.status]?.color }"
+                v-text="tmdbMovieStatuses[TMDBStore.state.currentMovieDetail?.status]?.text"></span>
+
+          <span class="rating">
+            <span v-text="TMDBStore.state.currentMovieDetail?.vote_average"></span>
+            <span>/10</span>
+          </span>
+
         </div>
         <div class="details">
           <h1 class="title" v-text="TMDBStore.state.currentMovieDetail?.title"></h1>
@@ -18,6 +25,17 @@
           <p class="runtime">
             <span v-text="TMDBStore.state.currentMovieDetail?.runtime"></span>
             Dakika
+          </p>
+          <p class="release_date">
+            Vizyon Tarihi:
+            <span v-text="TMDBStore.state.currentMovieDetail?.release_date"></span>
+            <a v-bind:href="TMDBStore.state.currentMovieDetail?.eventUrl"
+               class="create-event"
+               target="_blank"
+               v-if="TMDBStore.state.currentMovieDetail?.isFuture()">
+              <font-awesome-icon icon="calendar" />
+              Etkinlik Oluştur
+            </a>
           </p>
         </div>
         <div class="links">
@@ -46,7 +64,6 @@
             <li v-for="comp in TMDBStore.state.currentMovieDetail?.production_companies.filter(c => c.logo_path)"
                 v-bind:key="comp.id">
               <img v-bind:src="comp.logo_path" v-bind:alt="comp.name">
-              <span v-text="comp.name"></span>
             </li>
           </ul>
         </div>
@@ -54,7 +71,7 @@
     </div>
     <div class="cast">
       <h1 class="cast-title">Kadro</h1>
-      <carousel snap-align="center" items-to-show="5.5">
+      <carousel snap-align="center" items-to-show="5">
         <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
           <Cast v-bind:cast="cast" />
         </slide>
@@ -70,6 +87,7 @@ import TMDBStore from "../stores/TMDBStore";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import 'vue3-carousel/dist/carousel.css';
+import tmdbMovieStatuses from "@/helpers/tmdbMovieStatuses";
 
 export default {
   name: "FilmDetay",
@@ -77,7 +95,8 @@ export default {
   data() {
     return {
       movieId: 0,
-      TMDBStore
+      TMDBStore,
+      tmdbMovieStatuses
     };
   },
   async mounted() {
@@ -192,20 +211,67 @@ export default {
 
 .links a {
   transition: all .3s ease;
-  border: 3px solid #8a73e7;
+  border-bottom: 3px solid #8a73e7;
   text-decoration: none;
-  border-radius: 100px;
   padding: .5em 1em;
   margin-right: 1em;
   color: white;
 }
 
 .links a:hover {
-  background-color: #8a73e7;
+  border-color: white;
 }
 
 .runtime {
   font-size: 1.5em;
+}
+
+.release_date {
+  padding: 2em 0;
+  margin: 0;
+}
+
+.release_date .create-event {
+  color: white;
+  text-decoration: none;
+  padding: 1em 1.5em;
+  display: inline-block;
+  background-color: #8a73e7;
+  margin-left: 2em;
+  border-radius: 100px;
+  font-size: 0.75em;
+}
+
+.top-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.top-details .status {
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  border-radius: 10px;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.3));
+  box-shadow:
+    0.3px 0.4px 1.4px rgba(0, 0, 0, 0.028),
+    0.9px 1.3px 3.7px rgba(0, 0, 0, 0.042),
+    4px 6px 18px rgba(0, 0, 0, 0.07)
+  ;
+}
+
+.top-details .rating {
+  display: inline-block;
+  font-size: 1.5rem;
+}
+
+.top-details .rating span:first-child {
+  font-weight: bold;
+}
+
+.top-details .rating span:last-child {
+  font-size: 1rem;
 }
 
 </style>

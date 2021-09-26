@@ -69,7 +69,7 @@ export default {
     flex: 0 0 calc(100% * (1/5) - 0px - 1px);
     position: relative;
     margin: 0 1em 5em 1em;
-    height: 32em;
+    min-height: 26em;
     overflow: hidden;
     border-radius: 10px;
     padding-bottom: 1em;
@@ -105,7 +105,7 @@ export default {
 
   .movie-cover .back-content .v-lazy-image {
     width: 100%;
-    height: 24.5em;
+    height: auto;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -122,7 +122,7 @@ export default {
     text-align: center;
     display: inline-block;
     width: 100%;
-    height: 2em;
+    min-height: 2em;
     overflow: hidden;
     margin: 0.5em 0;
   }

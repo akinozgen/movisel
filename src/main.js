@@ -11,7 +11,8 @@ import {
     faPlusSquare,
     faCaretLeft,
     faCaretRight,
-    faExternalLinkAlt
+    faExternalLinkAlt,
+    faCalendar
 } from '@fortawesome/free-solid-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
 import TMDBStore from "@/stores/TMDBStore";
@@ -25,7 +26,8 @@ library.add(
     faCaretLeft,
     faCaretRight,
     faExternalLinkAlt,
-    faImdb
+    faImdb,
+    faCalendar
 );
 
 createApp(App)

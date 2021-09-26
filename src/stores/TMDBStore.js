@@ -84,6 +84,18 @@ export default createStore({
                 c.logo_path = `https://image.tmdb.org/t/p/w185/${c.logo_path}`;
                 return c;
             });
+            movRes.isFuture = () => {
+                return Date.parse(movRes.release_date) > Date.now();
+            };
+            let eventDate = (new Date(movRes.release_date))
+                .toISOString()
+                .replace(/ /g, '')
+                .replace(/:/g, '')
+                .replace(/-/g, '')
+                .replace(/\./g, '');
+            console.log(eventDate)
+
+            movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
             state.currentMovieDetail = movRes;
             console.log(movRes.poster_path)
         },
