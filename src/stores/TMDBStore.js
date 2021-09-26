@@ -12,7 +12,8 @@ export default createStore({
         activePage: 1,
         currentMovieDetail: null,
         movieCredits: [],
-        userFavs: []
+        userFavs: [],
+        searchResults: []
     },
     mutations: {
         async authenticate(state) {
@@ -140,6 +141,34 @@ export default createStore({
         },
         removeFromFavs(state, { id, type }) {
             state.userFavs = state.userFavs.filter(f => !(f.id === id && f.item_type === type));
+        },
+        async search(state, { query }) {
+            const movRes = await fetch(`${apiEndpoint}/search/movie?query=${query}&api_key=${state.apiKey}&language=tr-TR`)
+                .then((res) => res.json());
+
+            const tvRes = await fetch(`${apiEndpoint}/search/tv?query=${query}&api_key=${state.apiKey}&language=tr-TR`)
+                .then((res) => res.json());
+
+            movRes.results = movRes.results.map(r => {
+                r.type = 'movie';
+                return r;
+            });
+
+            tvRes.results = tvRes.results.map(r => {
+                r.type = 'tv';
+                return r;
+            })
+
+            let results = [...movRes?.results, ...tvRes?.results].splice(0, 10);
+
+            state.searchResults = results.map(m => ({
+                id: m.id,
+                title: m.type === 'movie' ? m.title : m.name,
+                decimal_rating: m.vote_average,
+                release_date: m.type === 'movie' ? m.release_date : m.first_air_date,
+                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
+                item_type: m.type
+            }));
         }
     }
 });

@@ -115,7 +115,14 @@ export default {
         id: this.movieId
       });
     }
-  }
+  },
+
+  watch: {
+    '$route'() {
+      this.movieId = this.$route.params.id;
+      this.getMovieData();
+    }
+  },
 }
 </script>
 

@@ -1,12 +1,39 @@
 <template>
   <div class="search-bar">
-    <input type="text" placeholder="Arama">
+    <input type="text" placeholder="Arama" autofocus @input="search" v-model="searchTerm">
+    <div class="results">
+      <ul>
+        <li v-bind:key="res.id" v-for="res in TMDBStore.state.searchResults">
+          <router-link v-bind:to="`/film-detay/${res.id}`" replace>
+            <font-awesome-icon icon="film" v-if="res.item_type === 'movie'" />
+            <font-awesome-icon icon="tv" v-else />
+            {{ res.title }}
+            ({{ res.decimal_rating }}/10)
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import TMDBStore from "../stores/TMDBStore";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 export default {
-  name: "SearchBar"
+  name: "SearchBar",
+  components: { FontAwesomeIcon },
+  data() {
+    return { TMDBStore, searchTerm: '' };
+  },
+  methods: {
+    search() {
+      if (this.searchTerm.length <= 3) return;
+      TMDBStore.commit('search', {
+        query: this.searchTerm
+      });
+    }
+  },
 }
 </script>
 
@@ -15,18 +42,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    position: relative;
   }
 
-  .search {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .search input {
+  .search-bar input {
     background-color: rgba(255, 255, 255, 0.55);
     padding: 12px 20px;
-    min-width: 300px;
+    width: 300px;
     border-radius: 100px;
     border: 0;
     box-shadow: inset
@@ -37,11 +60,46 @@ export default {
       41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
       100px 100px 80px rgba(0, 0, 0, 0.07)
     ;
-    transition: background-color .3s ease;
+    transition: all .3s ease;
     text-align: center;
   }
 
-  .search input:focus {
+  .search-bar input:focus {
     background-color: white;
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .search-bar .results {
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    transition: all .25s linear;
+    bottom: 0;
+    left: -20px;
+    right: -20px;
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .search-bar input:focus + .results {
+    opacity: 1;
+    height: 40em;
+    bottom: calc(-40em);
+  }
+
+  .search-bar .results ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .search-bar .results ul li a {
+    background-color: white;
+    display: block;
+    text-decoration: none;
+    color: #27213f;
+    font-size: 1.2rem;
+    padding: 12px 20px;
   }
 </style>
