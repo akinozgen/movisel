@@ -59,7 +59,7 @@ export default createStore({
             localStorage.setItem('session_expiry', expiration.toString());
         },
         async loadShowcaseMovies(state, {page, type}) {
-            const popRes = await fetch(`${apiEndpoint}/${type}/popular?api_key=${state.apiKey}&language=tr-TR&page=${page}`)
+            const popRes = await fetch(`${apiEndpoint}/${type}/popular?api_key=${state.apiKey}&language=tr-TR&page=${page}&region=TR`)
                 .then(res => res.json());
             if (!Array.isArray(popRes?.results)) return;
 
@@ -157,9 +157,9 @@ export default createStore({
             tvRes.results = tvRes.results.map(r => {
                 r.type = 'tv';
                 return r;
-            })
+            });
 
-            let results = [...movRes?.results, ...tvRes?.results].splice(0, 10);
+            let results = [...movRes?.results, ...tvRes?.results];
 
             state.searchResults = results.map(m => ({
                 id: m.id,
@@ -168,7 +168,7 @@ export default createStore({
                 release_date: m.type === 'movie' ? m.release_date : m.first_air_date,
                 poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
                 item_type: m.type
-            }));
+            })).sort((x, y) => y.decimal_rating - x.decimal_rating)
         }
     }
 });
