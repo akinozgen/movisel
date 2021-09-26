@@ -1,12 +1,14 @@
 <template>
   <div class="movie-cover">
     <div class="front-content">
-      <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav(movieData?.id, movieData?.item_type)">
-        <font-awesome-icon icon="star-half-alt" />
-      </button>
-      <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
-        <font-awesome-icon icon="star" />
-      </button>
+      <div class="fav-buttons" v-if="AuthStore.state.isLoggedIn">
+        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav(movieData?.id, movieData?.item_type)">
+          <font-awesome-icon :icon="['far', 'star']" />
+        </button>
+        <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
+          <font-awesome-icon :icon="['fas', 'star']" />
+        </button>
+      </div>
     </div>
     <div class="back-content" @click="gotoDetailPage">
       <v-lazy-image v-bind:src="movieData?.poster_url" />
