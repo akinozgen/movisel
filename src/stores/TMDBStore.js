@@ -95,15 +95,12 @@ export default createStore({
                 .replace(/:/g, '')
                 .replace(/-/g, '')
                 .replace(/\./g, '');
-            console.log(eventDate)
 
             movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
             state.currentMovieDetail = movRes;
             movRes.item_type = type;
-            console.log(movRes.poster_path)
         },
         async getMovieCredits(state, { id }) {
-            console.log(state, id);
             const crdRes = await fetch(`${apiEndpoint}/movie/${id}/credits?api_key=${state.apiKey}&language=tr-TR&`)
             .then(res => res.json());
 
@@ -115,7 +112,34 @@ export default createStore({
             });
         },
         async getUserFavs(state, { userFavs }) {
-            // TODO: burası yapılacak.
+            let movies = [];
+            let tvs = [];
+
+            for (const fav of userFavs) {
+                const res = await fetch(`${apiEndpoint}/${fav.type}/${fav.item_id}?api_key=${state.apiKey}&language=tr-TR`)
+                    .then((res) => res.json());
+
+                if (String(res?.id) !== String(fav.item_id)) continue;
+                let data = {
+                    id: res.id,
+                    title: fav.type === 'movie' ? res.title : res.name,
+                    decimal_rating: res.vote_average,
+                    release_date: fav.type === 'movie' ? res.release_date : res.first_air_date,
+                    poster_url: `https://image.tmdb.org/t/p/w500/${res.poster_path}`,
+                    item_type: fav.type
+                };
+
+                if (fav.type === 'movie') {
+                    movies.push(data);
+                } else {
+                    tvs.push(data);
+                }
+            }
+
+            state.userFavs = [ ...movies, ...tvs ];
+        },
+        removeFromFavs(state, { id, type }) {
+            state.userFavs = state.userFavs.filter(f => !(f.id === id && f.item_type === type));
         }
     }
 });

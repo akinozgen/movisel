@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import SupaBase from "@/stores/SupaBase";
+import TMDBStore from "./TMDBStore";
 
 export default createStore({
     state: {
@@ -27,9 +28,7 @@ export default createStore({
                 .order('created_at', {
                     ascending: false
                 });
-            if (favsError) {
-                console.log(favsError);
-            } else {
+            if (!favsError) {
                 state.userFavs = favsData;
             }
 
@@ -40,9 +39,7 @@ export default createStore({
                 .select()
                 .eq('user_id', userId);
 
-            if (listError) {
-                console.log(listError)
-            } else {
+            if (!listError) {
                 state.userLists = listData;
             }
 
@@ -53,7 +50,6 @@ export default createStore({
                 .select()
                 .or(`followed.eq.${state.userData.id},following.eq.${state.userData.id}`);
             if (followError) {
-                console.log(followError);
                 return;
             }
 
@@ -102,7 +98,6 @@ export default createStore({
                 }]);
             // Finish if something goes wrong
             if (error && !data) {
-                console.log(error);
                 return;
             }
             // update local state
@@ -122,11 +117,14 @@ export default createStore({
                 .delete()
                 .match({ user_id: state.userData.id, item_id: id, type: type });
             if (error) {
-                console.log(error);
                 return;
             }
             // remove fav from userfavs
             state.userFavs = state.userFavs.filter(f => !(f.item_id === id && f.type === type));
+            TMDBStore.commit('removeFromFavs', {
+                id: id,
+                type: type
+            });
         }
     }
 });
