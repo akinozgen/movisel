@@ -11,7 +11,8 @@ export default createStore({
         showcaseMaxPages: 1,
         activePage: 1,
         currentMovieDetail: null,
-        movieCredits: []
+        movieCredits: [],
+        userFavs: []
     },
     mutations: {
         async authenticate(state) {
@@ -112,6 +113,9 @@ export default createStore({
                 c.profile_path = `https://image.tmdb.org/t/p/h632/${c.profile_path}`;
                 return c;
             });
+        },
+        async getUserFavs(state, { userFavs }) {
+            // TODO: burası yapılacak.
         }
     }
 });

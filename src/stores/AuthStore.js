@@ -27,12 +27,47 @@ export default createStore({
                 .order('created_at', {
                     ascending: false
                 });
-            if (!Array.isArray(favsData)) {
+            if (favsError) {
                 console.log(favsError);
+            } else {
+                state.userFavs = favsData;
+            }
+
+            let { data: listData, error: listError } = await SupaBase
+                .state
+                .supabase
+                .from('lists')
+                .select()
+                .eq('user_id', userId);
+
+            if (listError) {
+                console.log(listError)
+            } else {
+                state.userLists = listData;
+            }
+
+            let { data: followData, error: followError } = await SupaBase
+                .state
+                .supabase
+                .from('follows')
+                .select()
+                .or(`followed.eq.${state.userData.id},following.eq.${state.userData.id}`);
+            if (followError) {
+                console.log(followError);
                 return;
             }
 
-            state.userFavs = favsData;
+            let follows = [];
+            let followed = [];
+            followData.forEach(f => {
+                if (f.followed === state.userData.id) {
+                    return follows.push(f.following);
+                }
+                followed.push(f.followed);
+            });
+
+            state.userFollows = follows;
+            state.userFollwed = followed;
         },
 
         logOut(state) {

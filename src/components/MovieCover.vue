@@ -6,7 +6,7 @@
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
         <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
-          <font-awesome-icon :icon="['fas', 'star']" />
+          <font-awesome-icon :icon="['fas', 'star']" class="fav" />
         </button>
       </div>
     </div>
@@ -157,5 +157,9 @@ export default {
     padding: 0.5em 1em;
     text-decoration: none;
     text-align: center;
+  }
+
+  .fav-buttons .fav {
+    color: #8a73e7;
   }
 </style>

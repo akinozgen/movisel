@@ -99,7 +99,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .grid {
     display: flex;
     align-items: flex-start;
