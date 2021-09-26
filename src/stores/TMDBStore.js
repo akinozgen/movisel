@@ -67,10 +67,11 @@ export default createStore({
                 title: type === 'movie' ? m.title : m.name,
                 decimal_rating: m.vote_average,
                 release_date: type === 'movie' ? m.release_date : m.first_air_date,
-                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`
+                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
+                item_type: type
             }));
         },
-        async getMovieData(state, {id}) {
+        async getMovieData(state, {id, type}) {
             const movRes = await fetch(`${apiEndpoint}/movie/${id}?api_key=${state.apiKey}&language=tr-TR&`)
             .then(res => res.json());
 
@@ -97,6 +98,7 @@ export default createStore({
 
             movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
             state.currentMovieDetail = movRes;
+            movRes.item_type = type;
             console.log(movRes.poster_path)
         },
         async getMovieCredits(state, { id }) {

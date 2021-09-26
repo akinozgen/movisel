@@ -96,7 +96,8 @@ export default {
     return {
       movieId: 0,
       TMDBStore,
-      tmdbMovieStatuses
+      tmdbMovieStatuses,
+      type: 'movie'
     };
   },
   async mounted() {
@@ -107,7 +108,8 @@ export default {
   methods: {
     async getMovieData() {
       TMDBStore.commit('getMovieData', {
-        id: this.movieId
+        id: this.movieId,
+        type: this.type
       });
       TMDBStore.commit('getMovieCredits', {
         id: this.movieId

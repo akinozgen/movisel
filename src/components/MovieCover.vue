@@ -1,7 +1,7 @@
 <template>
   <div class="movie-cover">
     <div class="front-content">
-      <button class="add-to-fav" @click.prevent="addToFavs" v-if="!movieData?.isFav">
+      <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav(movieData?.id, movieData?.item_type)">
         <font-awesome-icon icon="star-half-alt" />
       </button>
       <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
@@ -37,9 +37,28 @@ export default {
     movieData: Object
   },
   methods: {
-    addToFavs() {},
-    removeFromFavs() {},
+    addToFavs() {
+      if (!AuthStore.state.isLoggedIn) return false;
+      AuthStore.commit('addToFavs', {
+        id: this.movieData.id,
+        type: this.movieData.item_type
+      });
+    },
+    removeFromFavs() {
+      if (!AuthStore.state.isLoggedIn) return false;
+      AuthStore.commit('removeFromFavs', {
+        id: this.movieData.id,
+        type: this.movieData.item_type
+      });
+    },
     addToList() {},
+    isFav(id, type) {
+      if (!AuthStore.state.isLoggedIn)
+        return false;
+      let inFavs = AuthStore.state.userFavs.filter(f => f?.item_id === id && f?.type === type);
+
+      return inFavs.length > 0;
+    },
     gotoDetailPage() {
       router.push(`/film-detay/${this.movieData.id}`);
     }
