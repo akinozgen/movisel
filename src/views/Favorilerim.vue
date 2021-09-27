@@ -14,8 +14,8 @@
 
 <script>
 import AuthStore from "../stores/AuthStore";
-import MovieCover from "@/components/MovieCover";
-import TMDBStore from "@/stores/TMDBStore";
+import MovieCover from "../components/MovieCover";
+import TMDBStore from "../stores/TMDBStore";
 import router from "../router";
 
 export default {

@@ -18,7 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
-import TMDBStore from "@/stores/TMDBStore";
+import TMDBStore from "./stores/TMDBStore";
 
 library.add(
     faSignOutAlt,

@@ -87,7 +87,7 @@ import TMDBStore from "../stores/TMDBStore";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import 'vue3-carousel/dist/carousel.css';
-import tmdbMovieStatuses from "@/helpers/tmdbMovieStatuses";
+import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
 
 export default {
   name: "FilmDetay",

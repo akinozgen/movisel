@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import SupaBase from "@/stores/SupaBase";
+import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
 
 export default createStore({
