@@ -1,10 +1,8 @@
 import { createStore } from "vuex";
-import createPersistedStore from 'vuex-persistedstate';
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
 
 export default createStore({
-    plugins: [createPersistedStore()],
     state: {
         userData: null,
         isLoggedIn: false,
