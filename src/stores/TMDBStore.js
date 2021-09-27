@@ -90,14 +90,20 @@ export default createStore({
             movRes.isFuture = () => {
                 return Date.parse(movRes.release_date) > Date.now();
             };
-            let eventDate = (new Date(movRes.release_date))
-                .toISOString()
-                .replace(/ /g, '')
-                .replace(/:/g, '')
-                .replace(/-/g, '')
-                .replace(/\./g, '');
 
-            movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
+            try {
+                let eventDate = (new Date(movRes.release_date))
+                    .toISOString()
+                    .replace(/ /g, '')
+                    .replace(/:/g, '')
+                    .replace(/-/g, '')
+                    .replace(/\./g, '');
+
+                movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
+            } catch (e) {
+                console.log(e)
+            }
+
             state.currentMovieDetail = movRes;
             movRes.item_type = type;
         },
