@@ -1,10 +1,8 @@
 import { createStore } from "vuex";
-import createPersistedStore from 'vuex-persistedstate';
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
 
 export default createStore({
-    plugins: [createPersistedStore()],
     state: {
         showcaseMovies: [],
         apiKey: process.env.VUE_APP_TMDB_API_KEY,

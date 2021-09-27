@@ -71,27 +71,35 @@
     </div>
     <div class="cast">
       <h1 class="cast-title">Kadro</h1>
-      <carousel snap-align="center" items-to-show="5">
-        <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
-          <Cast v-bind:cast="cast" />
-        </slide>
-      </carousel>
+      <div>
+        <carousel snap-align="center"
+                  items-to-show="5"
+                  :mouseDrag="false"
+                  :currentSlide="5">
+          <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
+            <Cast v-bind:cast="cast" />
+          </slide>
+          <template #addons>
+            <Navigation />
+          </template>
+        </carousel>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import vLazyImage from 'v-lazy-image';
-import { Carousel, Slide } from 'vue3-carousel';
+import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import TMDBStore from "../stores/TMDBStore";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import 'vue3-carousel/dist/carousel.css';
 import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
+import 'vue3-carousel/dist/carousel.css';
 
 export default {
   name: "FilmDetay",
-  components: { vLazyImage, Carousel, Slide, Cast, FontAwesomeIcon },
+  components: { vLazyImage, Carousel, Slide, Cast, FontAwesomeIcon, Navigation },
   data() {
     return {
       movieId: 0,

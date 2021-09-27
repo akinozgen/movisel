@@ -24,6 +24,11 @@ body {
   font-family: 'Alegreya Sans', sans-serif;
   background-color: #27213f;
   color: white;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  overflow-x: hidden;
 }
 .center {
   text-align: center;
