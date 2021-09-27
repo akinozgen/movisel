@@ -1,6 +1,6 @@
 <template>
   <div class="search-bar">
-    <input type="text" placeholder="Arama" autofocus @input="search" v-model="searchTerm">
+    <input type="text" placeholder="Arama" @input="search" v-model="searchTerm">
     <div class="results">
       <ul>
         <li v-bind:key="res.id" v-for="res in TMDBStore.state.searchResults">
