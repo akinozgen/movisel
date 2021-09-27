@@ -19,6 +19,7 @@ import {
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
 import TMDBStore from "./stores/TMDBStore";
+import AuthStore from "./stores/AuthStore";
 
 library.add(
     faSignOutAlt,
@@ -42,3 +43,4 @@ createApp(App)
     .mount('#app');
 
 TMDBStore.commit('authenticate');
+AuthStore.commit('tryLoginWithToken');

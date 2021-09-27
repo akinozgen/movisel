@@ -1,8 +1,8 @@
 <template>
-  <div class="movie-cover" v-bind:class="{ glowing: fav }">
+  <div class="movie-cover" v-bind:class="{ glowing: isFav() }">
     <div class="front-content">
       <div class="fav-buttons" v-if="AuthStore.state.isLoggedIn">
-        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!fav">
+        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav()">
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
         <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
@@ -33,7 +33,7 @@ import router from "../router";
 
 export default {
   data() {
-    return { AuthStore, fav: false };
+    return { AuthStore };
   },
   props: {
     movieData: Object
@@ -45,7 +45,6 @@ export default {
         id: this.movieData.id,
         type: this.movieData.item_type
       });
-      this.fav = true;
     },
     removeFromFavs() {
       if (!AuthStore.state.isLoggedIn) return false;
@@ -53,13 +52,15 @@ export default {
         id: this.movieData.id,
         type: this.movieData.item_type
       });
-      this.fav = false;
     },
     addToList() {},
-    isFav(id, type) {
+    isFav() {
       if (!AuthStore.state.isLoggedIn)
         return false;
-      let inFavs = AuthStore.state.userFavs.filter(f => f?.item_id === id && f?.type === type);
+      let inFavs = AuthStore
+          .state
+          .userFavs
+          .filter(f => f?.item_id === this.movieData.id && f?.type === this.movieData.item_type);
 
       return inFavs.length > 0;
     },

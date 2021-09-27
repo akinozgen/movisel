@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import {createStore} from "vuex";
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
 
@@ -19,7 +19,7 @@ export default createStore({
             state.isLoggedIn = true;
 
             let userId = state.userData.id;
-            let { data: favsData, error: favsError } = await SupaBase
+            let {data: favsData, error: favsError} = await SupaBase
                 .state
                 .supabase
                 .from('favs')
@@ -32,7 +32,7 @@ export default createStore({
                 state.userFavs = favsData;
             }
 
-            let { data: listData, error: listError } = await SupaBase
+            let {data: listData, error: listError} = await SupaBase
                 .state
                 .supabase
                 .from('lists')
@@ -43,7 +43,7 @@ export default createStore({
                 state.userLists = listData;
             }
 
-            let { data: followData, error: followError } = await SupaBase
+            let {data: followData, error: followError} = await SupaBase
                 .state
                 .supabase
                 .from('follows')
@@ -71,11 +71,11 @@ export default createStore({
             state.isLoggedIn = false;
         },
 
-        async addToFavs(state, { id, type }) {
+        async addToFavs(state, {id, type}) {
             if (!state.isLoggedIn) return;
 
             // Check if row exists
-            let { data: checkData, error: checkError } = await SupaBase
+            let {data: checkData, error: checkError} = await SupaBase
                 .state
                 .supabase
                 .from('favs')
@@ -87,7 +87,7 @@ export default createStore({
             if (checkError || (checkData.length > 0)) return;
 
             // Insert new row
-            let { data, error } = await SupaBase
+            let {data, error} = await SupaBase
                 .state
                 .supabase
                 .from('favs')
@@ -107,15 +107,15 @@ export default createStore({
             });
         },
 
-        async removeFromFavs(state, { id, type }) {
+        async removeFromFavs(state, {id, type}) {
             if (!state.isLoggedIn) return;
 
-            let { error } = await SupaBase
+            let {error} = await SupaBase
                 .state
                 .supabase
                 .from('favs')
                 .delete()
-                .match({ user_id: state.userData.id, item_id: id, type: type });
+                .match({user_id: state.userData.id, item_id: id, type: type});
             if (error) {
                 return;
             }
@@ -125,6 +125,27 @@ export default createStore({
                 id: id,
                 type: type
             });
+        },
+
+        async tryLoginWithToken(state) {
+            if (state.isLoggedIn) return window.location = '/';
+            if (!localStorage.getItem('supabase.auth.token')) return;
+
+            const refreshToken = JSON.parse(localStorage.getItem('supabase.auth.token'))
+                ?.currentSession
+                ?.refresh_token;
+
+            if (!refreshToken) return;
+
+            const {error, user} = await SupaBase.state.supabase.auth.signIn({
+                refreshToken
+            });
+
+            if (error) {
+                return alert(error.message);
+            }
+
+            this.commit('login', user);
         }
     }
 });
