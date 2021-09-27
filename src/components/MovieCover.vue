@@ -1,8 +1,8 @@
 <template>
-  <div class="movie-cover">
+  <div class="movie-cover" v-bind:class="{ glowing: fav }">
     <div class="front-content">
       <div class="fav-buttons" v-if="AuthStore.state.isLoggedIn">
-        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav(movieData?.id, movieData?.item_type)">
+        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!fav">
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
         <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
@@ -33,7 +33,7 @@ import router from "../router";
 
 export default {
   data() {
-    return { AuthStore };
+    return { AuthStore, fav: false };
   },
   props: {
     movieData: Object
@@ -45,6 +45,7 @@ export default {
         id: this.movieData.id,
         type: this.movieData.item_type
       });
+      this.fav = true;
     },
     removeFromFavs() {
       if (!AuthStore.state.isLoggedIn) return false;
@@ -52,6 +53,7 @@ export default {
         id: this.movieData.id,
         type: this.movieData.item_type
       });
+      this.fav = false;
     },
     addToList() {},
     isFav(id, type) {
@@ -64,6 +66,9 @@ export default {
     gotoDetailPage() {
       router.push(`/film-detay/${this.movieData.id}`);
     }
+  },
+  mounted() {
+    this.fav = this.isFav(this.movieData.id, this.movieData.item_type);
   },
   name: "MovieCover",
   components: { vLazyImage },
@@ -91,9 +96,9 @@ export default {
     position: relative;
     margin: 0 1em 5em 1em;
     min-height: 26em;
-    overflow: hidden;
     border-radius: 10px;
     padding-bottom: 1em;
+    background-color: #44396e;
     box-shadow:
       0 5.4px 8.5px -16px rgba(0, 0, 0, 0.03),
       0 10.3px 15.6px -16px rgba(0, 0, 0, 0.037),
@@ -105,7 +110,6 @@ export default {
   }
 
   .movie-cover:hover {
-    transform: scale(1.05);
     box-shadow:
       5.3px 6.8px 4.7px -11px rgba(0, 0, 0, 0.017),
       10.4px 13.2px 10.8px -11px rgba(0, 0, 0, 0.021),
@@ -131,6 +135,8 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-image: linear-gradient(to right, #41295a, #2f0743);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
   .movie-cover .description {
@@ -161,5 +167,32 @@ export default {
 
   .fav-buttons .fav {
     color: #8a73e7;
+  }
+  .glowing::after{
+    content: '';
+    position: absolute;
+    left: -2px;
+    border-radius: 10px;
+    top: -2px;
+    background: linear-gradient(45deg, #e8f74d, #ff6600d9, #00ff66, #13ff13, #ad27ad, #bd2681, #6512b9, #ff3300de, #5aabde);
+    background-size: 400%;
+    width: calc(100% + 5px);
+    height: calc(100% + 5px);
+    z-index: -2;
+    animation: glower 20s linear infinite;
+  }
+
+  @keyframes glower {
+    0% {
+      background-position: 0 0;
+    }
+
+    50% {
+      background-position: 400% 0;
+    }
+
+    100% {
+      background-position: 0 0;
+    }
   }
 </style>
