@@ -176,7 +176,7 @@ export default createStore({
                 release_date: m.type === 'movie' ? m.release_date : m.first_air_date,
                 poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
                 item_type: m.type
-            }));
+            })).sort((x, y) => y.decimal_rating - x.decimal_rating);
         },
         async getSimilars(state, { id, type }) {
             console.log(state, id , type);
