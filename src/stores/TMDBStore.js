@@ -13,7 +13,8 @@ export default createStore({
         currentMovieDetail: null,
         movieCredits: [],
         userFavs: [],
-        searchResults: []
+        searchResults: [],
+        currentMovieSimilars: []
     },
     mutations: {
         async authenticate(state) {
@@ -106,6 +107,7 @@ export default createStore({
 
             state.currentMovieDetail = movRes;
             movRes.item_type = type;
+            window.scrollTo({ top: 0, behavior: "smooth" }); // shame :(
         },
         async getMovieCredits(state, { id }) {
             const crdRes = await fetch(`${apiEndpoint}/movie/${id}/credits?api_key=${state.apiKey}&language=tr-TR&`)
@@ -175,6 +177,23 @@ export default createStore({
                 poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
                 item_type: m.type
             }));
+        },
+        async getSimilars(state, { id, type }) {
+            console.log(state, id , type);
+            const res = await fetch(`${apiEndpoint}/${type}/${id}/similar?api_key=${state.apiKey}&language=tr-TR`)
+                .then((res) => res.json());
+
+            if (!Array.isArray(res.results)) return;
+
+            let similars = res.results.map((m) => ({
+                id: m.id,
+                title: type === 'movie' ? m.title : m.name,
+                decimal_rating: m.vote_average,
+                release_date: type === 'movie' ? m.release_date : m.first_air_date,
+                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
+                item_type: type
+            }));
+            state.currentMovieSimilars = similars.splice(0, 4);
         }
     }
 });

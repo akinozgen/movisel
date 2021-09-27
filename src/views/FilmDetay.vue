@@ -71,18 +71,27 @@
     </div>
     <div class="cast">
       <h1 class="cast-title">Kadro</h1>
-      <div>
-        <carousel snap-align="center"
-                  items-to-show="5"
-                  :mouseDrag="false"
-                  :currentSlide="5">
-          <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
-            <Cast v-bind:cast="cast" />
-          </slide>
-          <template #addons>
-            <Navigation />
-          </template>
-        </carousel>
+      <carousel snap-align="center"
+                items-to-show="5"
+                :mouseDrag="false"
+                :currentSlide="5">
+        <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
+          <Cast v-bind:cast="cast" />
+        </slide>
+        <template #addons>
+          <Navigation />
+        </template>
+      </carousel>
+    </div>
+
+    <div class="similar">
+      <h1 class="similar-title">
+        Benzer İçerikler
+      </h1>
+      <div class="similar-list grid">
+        <MovieCover :movie-data="movieDetails"
+                    v-for="movieDetails in TMDBStore.state.currentMovieSimilars"
+                    :key="movieDetails.id" />
       </div>
     </div>
   </div>
@@ -91,6 +100,7 @@
 <script>
 import vLazyImage from 'v-lazy-image';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import MovieCover from "../components/MovieCover";
 import TMDBStore from "../stores/TMDBStore";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -99,7 +109,15 @@ import 'vue3-carousel/dist/carousel.css';
 
 export default {
   name: "FilmDetay",
-  components: { vLazyImage, Carousel, Slide, Cast, FontAwesomeIcon, Navigation },
+  components: {
+    vLazyImage,
+    Carousel,
+    Slide,
+    Cast,
+    FontAwesomeIcon,
+    Navigation,
+    MovieCover
+  },
   data() {
     return {
       movieId: 0,
@@ -109,7 +127,6 @@ export default {
     };
   },
   async mounted() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
     this.movieId = this.$route.params.id;
     await this.getMovieData();
   },
@@ -121,6 +138,10 @@ export default {
       });
       TMDBStore.commit('getMovieCredits', {
         id: this.movieId
+      });
+      TMDBStore.commit('getSimilars', {
+        id: this.movieId,
+        type: this.type
       });
     }
   },
@@ -135,9 +156,9 @@ export default {
 </script>
 
 <style scoped>
-.cast {
+.cast, .similar {
   margin-top: 10em;
-  margin-bottom: 20em;
+  margin-bottom: 5em;
 }
 
 .backdrop {

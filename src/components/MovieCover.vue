@@ -66,7 +66,7 @@ export default {
     }
   },
   name: "MovieCover",
-  components: { vLazyImage }
+  components: { vLazyImage },
 }
 </script>
 
