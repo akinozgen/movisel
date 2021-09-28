@@ -75,7 +75,7 @@ export default createStore({
             }));
         },
         async getMovieData(state, {id, type}) {
-            const movRes = await fetch(`${apiEndpoint}/movie/${id}?api_key=${state.apiKey}&language=tr-TR&`)
+            const movRes = await fetch(`${apiEndpoint}/${type}/${id}?api_key=${state.apiKey}&language=tr-TR&`)
             .then(res => res.json());
 
             if (String(movRes?.id) !== String(id)) return;
@@ -89,11 +89,11 @@ export default createStore({
                 return c;
             });
             movRes.isFuture = () => {
-                return Date.parse(movRes.release_date) > Date.now();
+                return Date.parse(movRes.release_date ?? movRes.first_air_date) > Date.now();
             };
 
             try {
-                let eventDate = (new Date(movRes.release_date))
+                let eventDate = (new Date(movRes.release_date ?? movRes.first_air_date))
                     .toISOString()
                     .replace(/ /g, '')
                     .replace(/:/g, '')
@@ -105,12 +105,29 @@ export default createStore({
                 console.log(e)
             }
 
-            state.currentMovieDetail = movRes;
+            state.currentMovieDetail = {
+                release_date: movRes.release_date ?? movRes.first_air_date,
+                title: movRes.title ?? movRes.name,
+                isFuture: movRes.isFuture,
+                production_companies: movRes.production_companies,
+                tagline: movRes.tagline,
+                overview: movRes.overview,
+                status: movRes.status,
+                backdrop_path: movRes.backdrop_path,
+                homepage: movRes.homepage,
+                id: movRes.id,
+                item_type: type,
+                poster_path: movRes.poster_path,
+                imdb_id: movRes.imdb_id,
+                genres: movRes.genres,
+                vote_average: movRes.vote_average,
+                runtime: movRes.runtime ?? movRes.episode_run_time[0]
+            };
             movRes.item_type = type;
             window.scrollTo({ top: 0, behavior: "smooth" }); // shame :(
         },
-        async getMovieCredits(state, { id }) {
-            const crdRes = await fetch(`${apiEndpoint}/movie/${id}/credits?api_key=${state.apiKey}&language=tr-TR&`)
+        async getMovieCredits(state, { id, type }) {
+            const crdRes = await fetch(`${apiEndpoint}/${type}/${id}/credits?api_key=${state.apiKey}&language=tr-TR&`)
             .then(res => res.json());
 
             if (!Array.isArray(crdRes?.cast)) return;
@@ -179,7 +196,6 @@ export default createStore({
             })).sort((x, y) => y.decimal_rating - x.decimal_rating);
         },
         async getSimilars(state, { id, type }) {
-            console.log(state, id , type);
             const res = await fetch(`${apiEndpoint}/${type}/${id}/similar?api_key=${state.apiKey}&language=tr-TR`)
                 .then((res) => res.json());
 

@@ -13,7 +13,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Listelerim')
   },
   {
-    path: '/film-detay/:id',
+    path: '/detay/:type/:id',
     name: 'FilmDetay',
     component: () => import(/* webpackChunkName: "about" */ '../views/FilmDetay')
   },

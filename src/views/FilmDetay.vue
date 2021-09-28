@@ -40,7 +40,9 @@
           </p>
           <p class="release_date">
             Vizyon Tarihi:
-            <span v-text="TMDBStore.state.currentMovieDetail?.release_date"></span>
+            <span>
+              {{ TMDBStore.state.currentMovieDetail?.release_date }}
+            </span>
             <a v-bind:href="TMDBStore.state.currentMovieDetail?.eventUrl"
                class="create-event"
                target="_blank"
@@ -142,6 +144,7 @@ export default {
   },
   async mounted() {
     this.movieId = this.$route.params.id;
+    this.type = this.$route.params.type;
     await this.getMovieData();
   },
   methods: {
@@ -151,7 +154,8 @@ export default {
         type: this.type
       });
       TMDBStore.commit('getMovieCredits', {
-        id: this.movieId
+        id: this.movieId,
+        type: this.type
       });
       TMDBStore.commit('getSimilars', {
         id: this.movieId,
@@ -187,7 +191,9 @@ export default {
 
   watch: {
     '$route'() {
-      this.movieId = parseInt(String(this.$route.params.id));
+      const { id, type } = this.$route.params;
+      this.movieId = id;
+      this.type = type;
       this.getMovieData();
     }
   },

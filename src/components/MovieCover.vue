@@ -65,7 +65,7 @@ export default {
       return inFavs.length > 0;
     },
     gotoDetailPage() {
-      router.push(`/film-detay/${this.movieData.id}`);
+      router.push(`/detay/${this.movieData.item_type}/${this.movieData.id}`);
     }
   },
   mounted() {
