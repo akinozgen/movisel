@@ -175,25 +175,26 @@ export default createStore({
                 .then((res) => res.json());
 
             movRes.results = movRes.results.map(r => {
-                r.type = 'movie';
+                r.item_type = 'movie';
                 return r;
-            });
+            }).splice(0, 5);
 
             tvRes.results = tvRes.results.map(r => {
-                r.type = 'tv';
+                r.item_type = 'tv';
                 return r;
-            })
+            }).splice(0, 5);
 
-            let results = [...movRes?.results, ...tvRes?.results].splice(0, 10);
+            let results = [...movRes?.results, ...tvRes?.results];
 
             state.searchResults = results.map(m => ({
                 id: m.id,
-                title: m.type === 'movie' ? m.title : m.name,
+                title: m.item_type === 'movie' ? m.title : m.name,
                 decimal_rating: m.vote_average,
-                release_date: m.type === 'movie' ? m.release_date : m.first_air_date,
+                release_date: m.item_type === 'movie' ? m.release_date : m.first_air_date,
                 poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
-                item_type: m.type
-            })).sort((x, y) => y.decimal_rating - x.decimal_rating);
+                item_type: m.item_type,
+                popularity: m.popularity
+            })).sort((x, y) => x.popularity > y.popularity ? -1 : 1);
         },
         async getSimilars(state, { id, type }) {
             const res = await fetch(`${apiEndpoint}/${type}/${id}/similar?api_key=${state.apiKey}&language=tr-TR`)

@@ -4,7 +4,7 @@
     <div class="results">
       <ul>
         <li v-bind:key="res.id" v-for="res in TMDBStore.state.searchResults">
-          <router-link v-bind:to="`/film-detay/${res.id}`" replace>
+          <router-link v-bind:to="`/detay/${res.item_type}/${res.id}`" replace>
             <font-awesome-icon icon="film" v-if="res.item_type === 'movie'" />
             <font-awesome-icon icon="tv" v-else />
             {{ res.title }}

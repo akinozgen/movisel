@@ -142,7 +142,7 @@ export default createStore({
             });
 
             if (error) {
-                return alert(error.message);
+                return;
             }
 
             this.commit('login', user);
