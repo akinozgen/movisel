@@ -14,7 +14,12 @@ import {
     faExternalLinkAlt,
     faCalendar,
     faFilm,
-    faTv
+    faTv,
+    faEdit,
+    faTrash,
+    faSave,
+    faPlus,
+    faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
@@ -34,7 +39,12 @@ library.add(
     faCalendar,
     faStarRegular,
     faFilm,
-    faTv
+    faTv,
+    faEdit,
+    faTrash,
+    faSave,
+    faPlus,
+    faTimes
 );
 
 createApp(App)

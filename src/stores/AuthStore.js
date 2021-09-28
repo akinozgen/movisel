@@ -146,6 +146,50 @@ export default createStore({
             }
 
             this.commit('login', user);
+        },
+
+        async saveListDetails(state, { title, description, id }) {
+            const { error: saveError } = await SupaBase
+                .state
+                .supabase
+                .from('lists')
+                .update({ title, description })
+                .match({ id });
+            if (saveError) return;
+
+            let listIndex = state.userLists.indexOf( state.userLists.filter(l => l.id === id)[0] );
+            state.userLists[listIndex].title = title;
+            state.userLists[listIndex].description = description;
+        },
+
+        async deleteList(state, { id }) {
+            const { error: deleteError } = await SupaBase
+                .state
+                .supabase
+                .from('lists')
+                .delete()
+                .match({ id });
+
+            if (deleteError) return;
+
+            state.userLists = state.userLists.filter(l => l.id !== id);
+        },
+
+        async addList(state, { title, description }) {
+            const { error: insertError, data: insertData } = await SupaBase
+                .state
+                .supabase
+                .from('lists')
+                .insert({
+                    user_id: state.userData.id,
+                    title,
+                    description,
+                    poster_url: `http://placehold.it/280x400?text=${title}`
+                });
+
+            if (insertError) return;
+            console.log(insertData)
+            state.userLists.push(insertData[0]);
         }
     }
 });
