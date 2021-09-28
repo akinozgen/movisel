@@ -3,7 +3,19 @@
     <div class="backdrop" v-bind:style="{ backgroundImage: `url('${TMDBStore.state.currentMovieDetail?.backdrop_path}')` }"></div>
     <div class="movie-detail">
       <div class="left flex-4">
-        <v-lazy-image v-bind:src="TMDBStore.state.currentMovieDetail?.poster_path" />
+        <div class="img-container">
+           <div class="front-content">
+            <div class="fav-buttons" v-if="AuthStore.state.isLoggedIn">
+              <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav()">
+                <font-awesome-icon :icon="['far', 'star']" />
+              </button>
+              <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
+                <font-awesome-icon :icon="['fas', 'star']" class="fav" />
+              </button>
+            </div>
+          </div>
+          <v-lazy-image v-bind:src="TMDBStore.state.currentMovieDetail?.poster_path" />
+        </div>
       </div>
       <div class="right flex-8">
         <div class="top-details">
@@ -101,6 +113,7 @@
 import vLazyImage from 'v-lazy-image';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import MovieCover from "../components/MovieCover";
+import AuthStore from "../stores/AuthStore";
 import TMDBStore from "../stores/TMDBStore";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -120,6 +133,7 @@ export default {
   },
   data() {
     return {
+      AuthStore,
       movieId: 0,
       TMDBStore,
       tmdbMovieStatuses,
@@ -143,12 +157,37 @@ export default {
         id: this.movieId,
         type: this.type
       });
+    },
+    addToFavs() {
+      if (!AuthStore.state.isLoggedIn) return false;
+      AuthStore.commit('addToFavs', {
+        id: this.movieId,
+        type: this.type
+      });
+    },
+    removeFromFavs() {
+      if (!AuthStore.state.isLoggedIn) return false;
+      AuthStore.commit('removeFromFavs', {
+        id: this.movieId,
+        type: this.type
+      });
+    },
+    isFav() {
+      if (!AuthStore.state.isLoggedIn)
+        return false;
+
+      let inFavs = AuthStore
+          .state
+          .userFavs
+          .filter(f => parseInt(f?.item_id) === parseInt(this.movieId) && f?.type === this.type);
+
+      return inFavs.length > 0;
     }
   },
 
   watch: {
     '$route'() {
-      this.movieId = this.$route.params.id;
+      this.movieId = parseInt(String(this.$route.params.id));
       this.getMovieData();
     }
   },
@@ -311,5 +350,31 @@ export default {
 .top-details .rating span:last-child {
   font-size: 1rem;
 }
+
+.img-container {
+  position: relative;
+}
+
+button.add-to-fav {
+  border: 0;
+  padding: 0.5em;
+  color: white;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  margin: 0.2em;
+}
+
+.front-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 
 </style>
