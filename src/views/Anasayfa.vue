@@ -108,6 +108,10 @@ export default {
     flex-wrap: wrap;
   }
 
+  .grid.start {
+    justify-content: flex-start;
+  }
+
   .pagination {
     display: flex;
     align-items: center;

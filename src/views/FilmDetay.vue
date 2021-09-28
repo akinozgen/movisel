@@ -83,6 +83,17 @@
         </div>
       </div>
     </div>
+
+    <div class="seasons" v-if="type === 'tv'">
+      <h1 class="seasons-title">Sezonlar</h1>
+      <div class="grid">
+        <season-cover
+            :season-data="season"
+            v-for="season in TMDBStore.state.currentMovieDetail.seasons"
+            :key="season.id" />
+      </div>
+    </div>
+
     <div class="cast">
       <h1 class="cast-title">Kadro</h1>
       <carousel snap-align="center"
@@ -117,6 +128,7 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import MovieCover from "../components/MovieCover";
 import AuthStore from "../stores/AuthStore";
 import TMDBStore from "../stores/TMDBStore";
+import SeasonCover from "../components/SeasonCover";
 import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
@@ -128,6 +140,7 @@ export default {
     vLazyImage,
     Carousel,
     Slide,
+    SeasonCover,
     Cast,
     FontAwesomeIcon,
     Navigation,

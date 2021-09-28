@@ -105,6 +105,13 @@ export default createStore({
                 console.log(e)
             }
 
+            if (type === 'tv') {
+                movRes.seasons = movRes.seasons.filter(s => s.poster_path).map(s => {
+                    s.poster_path = `https://image.tmdb.org/t/p/w500/${s.poster_path}`;
+                    return s;
+                });
+            }
+
             state.currentMovieDetail = {
                 release_date: movRes.release_date ?? movRes.first_air_date,
                 title: movRes.title ?? movRes.name,
@@ -121,7 +128,8 @@ export default createStore({
                 imdb_id: movRes.imdb_id,
                 genres: movRes.genres,
                 vote_average: movRes.vote_average,
-                runtime: movRes.runtime ?? movRes.episode_run_time[0]
+                runtime: movRes.runtime ?? movRes.episode_run_time[0],
+                seasons: type === 'tv' ? movRes.seasons : null
             };
             movRes.item_type = type;
             window.scrollTo({ top: 0, behavior: "smooth" }); // shame :(
