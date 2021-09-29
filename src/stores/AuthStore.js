@@ -2,6 +2,8 @@ import {createStore} from "vuex";
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
 
+const apiEndpoint = 'https://api.themoviedb.org/3';
+
 export default createStore({
     state: {
         userData: null,
@@ -40,7 +42,32 @@ export default createStore({
                 .eq('user_id', userId);
 
             if (!listError) {
-                state.userLists = listData;
+                // i like you Promise.all
+                state.userLists = await Promise.all(listData.map(async (list) => {
+                    const { data: listData, error: listError } = await SupaBase
+                        .state
+                        .supabase
+                        .from('list_items')
+                        .select()
+                        .match({ list_id: list.id });
+                    if (listError) return list;
+
+                    list.movies = await Promise.all(listData.map(async (item) => {
+                        const movRes = await fetch(`${apiEndpoint}/${item.type}/${item.item_id}?api_key=${TMDBStore.state.apiKey}&language=tr-TR`)
+                            .then((res) => res.json());
+
+                        return {
+                            id: movRes.id,
+                            title: item.type === 'movie' ? movRes.title : movRes.name,
+                            decimal_rating: movRes.vote_average,
+                            release_date: item.type === 'movie' ? movRes.release_date : movRes.first_air_date,
+                            poster_url: `https://image.tmdb.org/t/p/w500/${movRes.poster_path}`,
+                            item_type: item.type
+                        }
+                    }));
+
+                    return list;
+                }));
             }
 
             let {data: followData, error: followError} = await SupaBase

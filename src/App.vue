@@ -97,4 +97,8 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.danger-text {
+  color: red !important;
+}
 </style>

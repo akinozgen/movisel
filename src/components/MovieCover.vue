@@ -19,8 +19,20 @@
       <span class="rating"><span v-text="movieData?.decimal_rating"></span>/10</span>
     </div>
     <div class="actions" v-if="AuthStore.state.isLoggedIn">
-      <a href="javascript:void(0)" class="add-to-list" @click="addToList">
-        <font-awesome-icon icon="plus-square" /> Listeye Ekle
+      <div v-if="this.listItem">
+        <a href="javascript:void(0)" class="make-cover" @click="makeCover">
+          <font-awesome-icon icon="photo-video" />
+          Liste Kapağı Yap
+        </a>
+        <a href="javascript:void(0)" class="danger-text" @click="addToList">
+          <font-awesome-icon icon="times" />
+          Listeden Çıkar
+        </a>
+      </div>
+
+      <a href="javascript:void(0)" class="add-to-list" @click="addToList" v-else>
+        <font-awesome-icon icon="plus-square" />
+        Listeye Ekle
       </a>
     </div>
   </div>
@@ -36,7 +48,11 @@ export default {
     return { AuthStore };
   },
   props: {
-    movieData: Object
+    movieData: Object,
+    listItem: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     addToFavs() {
@@ -54,6 +70,7 @@ export default {
       });
     },
     addToList() {},
+    makeCover() {},
     isFav() {
       if (!AuthStore.state.isLoggedIn)
         return false;

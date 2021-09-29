@@ -1,6 +1,6 @@
 <template>
   <div class="list">
-    <div class="image">
+    <div class="image" @click="goToDetails">
       <v-lazy-image :src="listItem.poster_url" v-if="!newList" />
       <v-lazy-image src="http://placehold.it/280x400/44396e?text=Yeni Liste*" v-else />
     </div>
@@ -34,6 +34,7 @@
 import vLazyImage from 'v-lazy-image';
 import AuthStore from "../stores/AuthStore";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import router from "../router";
 
 export default {
   name: "ListCover",
@@ -81,6 +82,10 @@ export default {
       AuthStore.commit('deleteList', {
         id: this.listItem.id
       });
+    },
+    goToDetails() {
+      if (this.newList) return;
+      router.push(`/liste/${this.listItem.id}`);
     }
   }
 }
@@ -106,6 +111,7 @@ export default {
   }
 
   .list .v-lazy-image {
+    cursor: pointer;
     width: 100%;
     height: auto;
     background-size: cover;
