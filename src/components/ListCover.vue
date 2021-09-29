@@ -2,7 +2,7 @@
   <div class="list">
     <div class="image">
       <v-lazy-image :src="listItem.poster_url" v-if="!newList" />
-      <v-lazy-image src="http://placehold.it/280x400?text=Yeni Liste*" v-else />
+      <v-lazy-image src="http://placehold.it/280x400/44396e?text=Yeni Liste*" v-else />
     </div>
     <div class="details">
 
