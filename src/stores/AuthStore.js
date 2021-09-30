@@ -232,6 +232,23 @@ export default createStore({
             if (!(typeof index === 'number' && index >= 0)) return;
 
             state.userLists[index].poster_url = cover;
+        },
+
+        async removeFromList(state, { id, item_id, type }) {
+            const { error: removeError } = await SupaBase
+                .state
+                .supabase
+                .from('list_items')
+                .delete()
+                .match({ list_id: id, item_id, type });
+            if (removeError) return;
+
+            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === id)[0] );
+            if (!(typeof index === 'number' && index >= 0)) return;
+
+            state.userLists[index].movies = state.userLists[index].movies.filter((m) => !(
+                m.id === item_id && m.item_type === type
+            ));
         }
     }
 });

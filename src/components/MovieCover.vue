@@ -24,7 +24,7 @@
           <font-awesome-icon icon="photo-video" />
           Liste Kapağı Yap
         </a>
-        <a href="javascript:void(0)" class="danger-text" @click="addToList">
+        <a href="javascript:void(0)" class="danger-text" @click="removeFromList">
           <font-awesome-icon icon="times" />
           Listeden Çıkar
         </a>
@@ -74,11 +74,18 @@ export default {
       });
     },
     addToList() {},
+    removeFromList() {
+      AuthStore.commit('removeFromList', {
+        id: this.listId,
+        item_id: this.movieData.id,
+        type: this.movieData.item_type,
+      });
+    },
     makeCover() {
       AuthStore.commit('makeCoverForList', {
         id: this.listId,
         cover: this.movieData.poster_url
-      })
+      });
     },
     isFav() {
       if (!AuthStore.state.isLoggedIn)
