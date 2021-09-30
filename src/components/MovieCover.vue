@@ -52,6 +52,7 @@
 import vLazyImage from 'v-lazy-image';
 import AuthStore from "../stores/AuthStore";
 import router from "../router";
+import '../styles/dropdown.css';
 
 export default {
   data() {
@@ -251,35 +252,4 @@ export default {
     }
   }
 
-  .dropdown-button {
-    display: flex;
-    position: relative;
-  }
-
-  .dropdown-button .dropdown-list {
-    position: absolute;
-    list-style-type: none;
-    margin: 0;
-    left: 0;
-    background-color: white;
-    top: 100%;
-    padding: 0.5em;
-    border-radius: 10px;
-    display: none;
-  }
-
-  .dropdown-button .dropdown-list.show {
-    display: block;
-  }
-
-  .dropdown-button .dropdown-list li a {
-    color: #2f0743;
-    padding: 0.3em 0.8em;
-    display: inline-block;
-    border-radius: 5px;
-  }
-
-  .dropdown-button .dropdown-list li a:hover {
-    background-color: #8a73e7;
-  }
 </style>

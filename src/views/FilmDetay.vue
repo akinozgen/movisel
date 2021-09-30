@@ -38,6 +38,21 @@
             <span v-text="TMDBStore.state.currentMovieDetail?.runtime"></span>
             Dakika
           </p>
+          <div class="add-to-list">
+            <a tabindex="1"
+               href="javascript:void(0)"
+               class="dropdown-button"
+               @focusin="toggleDropdown"
+               @focusout="toggleDropdown">
+              <font-awesome-icon icon="plus-square" />
+              Listeye Ekle
+              <ul tabindex="1" class="dropdown-list" v-bind:class="{ show: dropdownOpen }">
+                <li v-for="list in AuthStore.state.userLists" :key="list.id">
+                  <a @mousedown="addToList" href="javascript:void(0)" :data-list="list.id">{{ list.title }}</a>
+                </li>
+              </ul>
+            </a>
+          </div>
           <p class="release_date">
             Vizyon Tarihi:
             <span>
@@ -133,6 +148,7 @@ import Cast from "../components/Cast";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
 import 'vue3-carousel/dist/carousel.css';
+import '../styles/dropdown.css';
 
 export default {
   name: "FilmDetay",
@@ -152,7 +168,8 @@ export default {
       movieId: 0,
       TMDBStore,
       tmdbMovieStatuses,
-      type: 'movie'
+      type: 'movie',
+      dropdownOpen: false
     };
   },
   async mounted() {
@@ -199,7 +216,27 @@ export default {
           .filter(f => parseInt(f?.item_id) === parseInt(this.movieId) && f?.type === this.type);
 
       return inFavs.length > 0;
-    }
+    },
+    addToList(event) {
+      let listId = event.currentTarget.dataset.list;
+      let movieData = TMDBStore.state.currentMovieDetail;
+      AuthStore.commit('addToList', {
+        item_id: TMDBStore.state.currentMovieDetail.id,
+        list_id: listId,
+        item_type: TMDBStore.state.currentMovieDetail.item_type,
+        movie_data: {
+          id: movieData.id,
+          title: movieData.item_type === 'movie' ? movieData.title : movieData.name,
+          decimal_rating: movieData.vote_average,
+          release_date: movieData.item_type === 'movie' ? movieData.release_date : movieData.first_air_date,
+          poster_url: `https://image.tmdb.org/t/p/w500/${movieData.poster_path}`,
+          item_type: movieData.item_type
+        }
+      });
+    },
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
   },
 
   watch: {
