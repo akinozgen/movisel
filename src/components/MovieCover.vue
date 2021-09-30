@@ -30,9 +30,19 @@
         </a>
       </div>
 
-      <a href="javascript:void(0)" class="add-to-list" @click="addToList" v-else>
+      <a tabindex="1"
+         href="javascript:void(0)"
+         class="add-to-list dropdown-button"
+         @focusin="toggleDropdown"
+         @focusout="toggleDropdown"
+         v-else>
         <font-awesome-icon icon="plus-square" />
         Listeye Ekle
+        <ul tabindex="1" class="dropdown-list" v-bind:class="{ show: dropdownOpen }">
+          <li v-for="list in AuthStore.state.userLists" :key="list.id">
+            <a @mousedown="addToList" href="javascript:void(0)" :data-list="list.id">{{ list.title }}</a>
+          </li>
+        </ul>
       </a>
     </div>
   </div>
@@ -45,7 +55,7 @@ import router from "../router";
 
 export default {
   data() {
-    return { AuthStore };
+    return { AuthStore, dropdownOpen: false };
   },
   props: {
     movieData: Object,
@@ -73,7 +83,18 @@ export default {
         type: this.movieData.item_type
       });
     },
-    addToList() {},
+    addToList(event) {
+      let listId = event.currentTarget.dataset.list;
+      AuthStore.commit('addToList', {
+        item_id: this.movieData.id,
+        list_id: listId,
+        item_type: this.movieData.item_type,
+        movie_data: this.movieData
+      });
+    },
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
     removeFromList() {
       AuthStore.commit('removeFromList', {
         id: this.listId,
@@ -228,5 +249,37 @@ export default {
     100% {
       background-position: 0 0;
     }
+  }
+
+  .dropdown-button {
+    display: flex;
+    position: relative;
+  }
+
+  .dropdown-button .dropdown-list {
+    position: absolute;
+    list-style-type: none;
+    margin: 0;
+    left: 0;
+    background-color: white;
+    top: 100%;
+    padding: 0.5em;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .dropdown-button .dropdown-list.show {
+    display: block;
+  }
+
+  .dropdown-button .dropdown-list li a {
+    color: #2f0743;
+    padding: 0.3em 0.8em;
+    display: inline-block;
+    border-radius: 5px;
+  }
+
+  .dropdown-button .dropdown-list li a:hover {
+    background-color: #8a73e7;
   }
 </style>

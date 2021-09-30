@@ -249,6 +249,19 @@ export default createStore({
             state.userLists[index].movies = state.userLists[index].movies.filter((m) => !(
                 m.id === item_id && m.item_type === type
             ));
+        },
+
+        async addToList(state, { item_id, list_id, item_type, movie_data }) {
+            const { error: insertError } = await SupaBase
+                .state
+                .supabase
+                .from('list_items')
+                .insert({ item_id, list_id, type: item_type, user_id: state.userData.id });
+            if (insertError) return;
+
+            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === parseInt(list_id))[0] );
+            if (!(typeof index === 'number' && index >= 0)) return;
+            state.userLists[index].movies.push(movie_data);
         }
     }
 });
