@@ -10,6 +10,7 @@
           v-for="movieData in listData.movies"
           :movie-data="movieData"
           :list-item="true"
+          :list-id="listData.id"
           :key="movieData.id" />
     </div>
   </div>

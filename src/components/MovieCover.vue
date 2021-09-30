@@ -52,6 +52,10 @@ export default {
     listItem: {
       type: Boolean,
       default: false
+    },
+    listId: {
+      type: Number,
+      default: 0
     }
   },
   methods: {
@@ -70,7 +74,12 @@ export default {
       });
     },
     addToList() {},
-    makeCover() {},
+    makeCover() {
+      AuthStore.commit('makeCoverForList', {
+        id: this.listId,
+        cover: this.movieData.poster_url
+      })
+    },
     isFav() {
       if (!AuthStore.state.isLoggedIn)
         return false;

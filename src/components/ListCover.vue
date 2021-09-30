@@ -44,7 +44,8 @@ export default {
       editMode: this.newListMode,
       title: this.listItem.title,
       description: this.listItem.description,
-      newList: this.newListMode
+      newList: this.newListMode,
+      AuthStore
     }
   },
   props: {

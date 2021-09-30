@@ -217,6 +217,21 @@ export default createStore({
             if (insertError) return;
             console.log(insertData)
             state.userLists.push(insertData[0]);
+        },
+
+        async makeCoverForList(state, { id, cover }) {
+            const { error: updateError } = await SupaBase
+                .state
+                .supabase
+                .from('lists')
+                .update({ poster_url: cover })
+                .match({ id });
+            if (updateError) return;
+
+            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === id)[0] );
+            if (!(typeof index === 'number' && index >= 0)) return;
+
+            state.userLists[index].poster_url = cover;
         }
     }
 });
