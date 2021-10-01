@@ -215,8 +215,10 @@ export default createStore({
                 });
 
             if (insertError) return;
-            console.log(insertData)
-            state.userLists.push(insertData[0]);
+
+            let listData = insertData[0];
+            listData.movies = [];
+            state.userLists.push(listData);
         },
 
         async makeCoverForList(state, { id, cover }) {
