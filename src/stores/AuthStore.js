@@ -1,7 +1,7 @@
 import {createStore} from "vuex";
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
-import {getIndexOf} from "../helpers/authDataHelpers";
+import {dbDelete, dbInsert, dbSelect, dbUpdate, getIndexOf} from "../helpers/authDataHelpers";
 import {castMovieToCover} from "../helpers/movieDataHelpers";
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
@@ -23,35 +23,29 @@ export default createStore({
             state.isLoggedIn = true;
 
             let userId = state.userData.id;
-            let {data: favsData, error: favsError} = await SupaBase
-                .state
-                .supabase
-                .from('favs')
-                .select()
-                .eq('user_id', userId)
-                .order('created_at', {
-                    ascending: false
-                });
+            let { data: favsData, error: favsError } = await dbSelect({
+                table: 'favs',
+                match: { 'user_id': userId },
+                orderCol: 'created_at',
+                asc: false
+            });
+
             if (!favsError) {
                 state.userFavs = favsData;
             }
 
-            let {data: listData, error: listError} = await SupaBase
-                .state
-                .supabase
-                .from('lists')
-                .select()
-                .eq('user_id', userId);
+            let {data: listData, error: listError} = await dbSelect({
+                table: 'lists',
+                match: { 'user_id': userId }
+            });
 
             if (!listError) {
                 // i like you Promise.all
                 state.userLists = await Promise.all(listData.map(async (list) => {
-                    const { data: listData, error: listError } = await SupaBase
-                        .state
-                        .supabase
-                        .from('list_items')
-                        .select()
-                        .match({ list_id: list.id });
+                    const { data: listData, error: listError } = await dbSelect({
+                        table: 'list_items',
+                        match: { 'list_id': list.id }
+                    });
                     if (listError) return list;
 
                     list.movies = await Promise.all(listData.map(async (item) => {
@@ -68,12 +62,10 @@ export default createStore({
                 }));
             }
 
-            let {data: followData, error: followError} = await SupaBase
-                .state
-                .supabase
-                .from('follows')
-                .select()
-                .or(`followed.eq.${state.userData.id},following.eq.${state.userData.id}`);
+            let { data: followData, error: followError } = await dbSelect({
+                table: 'follows',
+                or: `followed.eq.${state.userData.id},following.eq.${state.userData.id}`
+            });
 
             if (!followError) {
                 let follows = [];
@@ -99,27 +91,22 @@ export default createStore({
             if (!state.isLoggedIn) return;
 
             // Check if row exists
-            let {data: checkData, error: checkError} = await SupaBase
-                .state
-                .supabase
-                .from('favs')
-                .select()
-                .eq('item_id', id)
-                .eq('type', type)
-                .eq('user_id', state.userData.id);
+            let { data: checkData, error: checkError } = await dbSelect({
+                table: 'favs',
+                match: { 'item_id': id, 'type': type, 'user_id': state.userData.id }
+            });
             // Finish if row exists
-            if (checkError || (checkData.length > 0)) return;
+            if (checkError || checkData.length > 0) return;
 
             // Insert new row
-            let {data, error} = await SupaBase
-                .state
-                .supabase
-                .from('favs')
-                .insert([{
+            let {data, error} = await dbInsert({
+                table: 'favs',
+                data: {
                     item_id: id,
                     type: type,
                     user_id: state.userData.id
-                }]);
+                }
+            });
             // Finish if something goes wrong
             if (error && !data) {
                 return;
@@ -134,12 +121,10 @@ export default createStore({
         async removeFromFavs(state, {id, type}) {
             if (!state.isLoggedIn) return;
 
-            let {error} = await SupaBase
-                .state
-                .supabase
-                .from('favs')
-                .delete()
-                .match({user_id: state.userData.id, item_id: id, type: type});
+            let {error} = await dbDelete({
+                table: 'favs',
+                match: {user_id: state.userData.id, item_id: id, type: type}
+            });
             if (error) {
                 return;
             }
@@ -173,12 +158,11 @@ export default createStore({
         },
 
         async saveListDetails(state, { title, description, id }) {
-            const { error: saveError } = await SupaBase
-                .state
-                .supabase
-                .from('lists')
-                .update({ title, description })
-                .match({ id });
+            const { error: saveError } = await dbUpdate({
+                table: 'lists',
+                data: { title, description },
+                match: { id }
+            });
             if (saveError) return;
 
             let listIndex = state.userLists.indexOf( state.userLists.filter(l => l.id === id)[0] );
@@ -187,12 +171,10 @@ export default createStore({
         },
 
         async deleteList(state, { id }) {
-            const { error: deleteError } = await SupaBase
-                .state
-                .supabase
-                .from('lists')
-                .delete()
-                .match({ id });
+            const { error: deleteError } = await dbDelete({
+                table: 'lists',
+                match: { id }
+            });
 
             if (deleteError) return;
 
@@ -200,16 +182,15 @@ export default createStore({
         },
 
         async addList(state, { title, description }) {
-            const { error: insertError, data: insertData } = await SupaBase
-                .state
-                .supabase
-                .from('lists')
-                .insert({
+            const { error: insertError, data: insertData } = await dbInsert({
+                table: 'lists',
+                data: {
                     user_id: state.userData.id,
                     title,
                     description,
                     poster_url: `http://placehold.it/280x400/44396e?text=${title}`
-                });
+                }
+            });
 
             if (insertError) return;
 
@@ -219,12 +200,11 @@ export default createStore({
         },
 
         async makeCoverForList(state, { id, cover }) {
-            const { error: updateError } = await SupaBase
-                .state
-                .supabase
-                .from('lists')
-                .update({ poster_url: cover })
-                .match({ id });
+            const { error: updateError } = await dbUpdate({
+                table: 'lists',
+                data: { poster_url: cover },
+                match: { id }
+            });
             if (updateError) return;
 
             let index = getIndexOf({
@@ -238,12 +218,11 @@ export default createStore({
         },
 
         async removeFromList(state, { id, item_id, type }) {
-            const { error: removeError } = await SupaBase
-                .state
-                .supabase
-                .from('list_items')
-                .delete()
-                .match({ list_id: id, item_id, type });
+            const { error: removeError } = await dbDelete({
+                table: 'list_items',
+                match: { list_id: id, item_id, type }
+            });
+
             if (removeError) return;
 
             let index = getIndexOf({
@@ -259,11 +238,10 @@ export default createStore({
         },
 
         async addToList(state, { item_id, list_id, item_type, movie_data }) {
-            const { error: insertError } = await SupaBase
-                .state
-                .supabase
-                .from('list_items')
-                .insert({ item_id, list_id, type: item_type, user_id: state.userData.id });
+            const { error: insertError } = await dbInsert({
+                table: 'list_items',
+                data: { item_id, list_id, type: item_type, user_id: state.userData.id }
+            });
             if (insertError) return;
 
             let index = getIndexOf({
