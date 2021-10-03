@@ -1,6 +1,8 @@
 import {createStore} from "vuex";
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
+import {getIndexOf} from "../helpers/authDataHelpers";
+import {castMovieToCover} from "../helpers/movieDataHelpers";
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
 
@@ -56,14 +58,10 @@ export default createStore({
                         const movRes = await fetch(`${apiEndpoint}/${item.type}/${item.item_id}?api_key=${TMDBStore.state.apiKey}&language=tr-TR`)
                             .then((res) => res.json());
 
-                        return {
-                            id: movRes.id,
-                            title: item.type === 'movie' ? movRes.title : movRes.name,
-                            decimal_rating: movRes.vote_average,
-                            release_date: item.type === 'movie' ? movRes.release_date : movRes.first_air_date,
-                            poster_url: `https://image.tmdb.org/t/p/w500/${movRes.poster_path}`,
-                            item_type: item.type
-                        }
+                        return castMovieToCover({
+                            movieData: movRes,
+                            type: item.type
+                        })
                     }));
 
                     return list;
@@ -76,21 +74,20 @@ export default createStore({
                 .from('follows')
                 .select()
                 .or(`followed.eq.${state.userData.id},following.eq.${state.userData.id}`);
-            if (followError) {
-                return;
+
+            if (!followError) {
+                let follows = [];
+                let followed = [];
+                followData.forEach(f => {
+                    if (f.followed === state.userData.id) {
+                        return follows.push(f.following);
+                    }
+                    followed.push(f.followed);
+                });
+
+                state.userFollows = follows;
+                state.userFollwed = followed;
             }
-
-            let follows = [];
-            let followed = [];
-            followData.forEach(f => {
-                if (f.followed === state.userData.id) {
-                    return follows.push(f.following);
-                }
-                followed.push(f.followed);
-            });
-
-            state.userFollows = follows;
-            state.userFollwed = followed;
         },
 
         logOut(state) {
@@ -230,7 +227,11 @@ export default createStore({
                 .match({ id });
             if (updateError) return;
 
-            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === id)[0] );
+            let index = getIndexOf({
+                array: state.userLists,
+                key1: 'id',
+                key2: parseInt(id)
+            });
             if (!(typeof index === 'number' && index >= 0)) return;
 
             state.userLists[index].poster_url = cover;
@@ -245,7 +246,11 @@ export default createStore({
                 .match({ list_id: id, item_id, type });
             if (removeError) return;
 
-            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === id)[0] );
+            let index = getIndexOf({
+                array: state.userLists,
+                key1: 'id',
+                key2: parseInt(id)
+            });
             if (!(typeof index === 'number' && index >= 0)) return;
 
             state.userLists[index].movies = state.userLists[index].movies.filter((m) => !(
@@ -261,7 +266,11 @@ export default createStore({
                 .insert({ item_id, list_id, type: item_type, user_id: state.userData.id });
             if (insertError) return;
 
-            let index = state.userLists.indexOf( state.userLists.filter((l) => l.id === parseInt(list_id))[0] );
+            let index = getIndexOf({
+                array: state.userLists,
+                key1: 'id',
+                key2: parseInt(list_id)
+            });
             if (!(typeof index === 'number' && index >= 0)) return;
             state.userLists[index].movies.push(movie_data);
         }

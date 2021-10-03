@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import {castMovieToCover, castMovieToDetailsPage, getUserFavMovies} from "../helpers/movieDataHelpers";
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
 
@@ -65,73 +66,15 @@ export default createStore({
             if (!Array.isArray(popRes?.results)) return;
 
             state.showcaseMaxPages = parseInt(popRes.total_pages);
-            state.showcaseMovies = popRes.results.map(m => ({
-                id: m.id,
-                title: type === 'movie' ? m.title : m.name,
-                decimal_rating: m.vote_average,
-                release_date: type === 'movie' ? m.release_date : m.first_air_date,
-                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
-                item_type: type
-            }));
+            state.showcaseMovies = popRes.results.map(m => castMovieToCover({ movieData: m, type }));
         },
         async getMovieData(state, {id, type}) {
             const movRes = await fetch(`${apiEndpoint}/${type}/${id}?api_key=${state.apiKey}&language=tr-TR&`)
             .then(res => res.json());
 
             if (String(movRes?.id) !== String(id)) return;
+            state.currentMovieDetail = castMovieToDetailsPage({ movieData: movRes, type });
 
-            movRes.backdrop_path = `https://image.tmdb.org/t/p/original/${movRes.backdrop_path}`;
-            movRes.poster_path = `https://image.tmdb.org/t/p/w780/${movRes.poster_path}`;
-            movRes.production_companies = movRes.production_companies.map((c) => {
-                if (!c.logo_path) return c;
-
-                c.logo_path = `https://image.tmdb.org/t/p/w185/${c.logo_path}`;
-                return c;
-            });
-            movRes.isFuture = () => {
-                return Date.parse(movRes.release_date ?? movRes.first_air_date) > Date.now();
-            };
-
-            try {
-                let eventDate = (new Date(movRes.release_date ?? movRes.first_air_date))
-                    .toISOString()
-                    .replace(/ /g, '')
-                    .replace(/:/g, '')
-                    .replace(/-/g, '')
-                    .replace(/\./g, '');
-
-                movRes.eventUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${movRes.title ?? movRes.name} - Vizyon Tarihi&dates=${eventDate}/${eventDate}&details=${movRes.homepage}&sf=true&output=xml`;
-            } catch (e) {
-                console.log(e)
-            }
-
-            if (type === 'tv') {
-                movRes.seasons = movRes.seasons.filter(s => s.poster_path).map(s => {
-                    s.poster_path = `https://image.tmdb.org/t/p/w500/${s.poster_path}`;
-                    return s;
-                });
-            }
-
-            state.currentMovieDetail = {
-                release_date: movRes.release_date ?? movRes.first_air_date,
-                title: movRes.title ?? movRes.name,
-                isFuture: movRes.isFuture,
-                production_companies: movRes.production_companies,
-                tagline: movRes.tagline,
-                overview: movRes.overview,
-                status: movRes.status,
-                backdrop_path: movRes.backdrop_path,
-                homepage: movRes.homepage,
-                id: movRes.id,
-                item_type: type,
-                poster_path: movRes.poster_path,
-                imdb_id: movRes.imdb_id,
-                genres: movRes.genres,
-                vote_average: movRes.vote_average,
-                runtime: movRes.runtime ?? movRes.episode_run_time[0],
-                seasons: type === 'tv' ? movRes.seasons : null
-            };
-            movRes.item_type = type;
             window.scrollTo({ top: 0, behavior: "smooth" }); // shame :(
         },
         async getMovieCredits(state, { id, type }) {
@@ -146,31 +89,11 @@ export default createStore({
             });
         },
         async getUserFavs(state, { userFavs }) {
-            let movies = [];
-            let tvs = [];
-
-            for (const fav of userFavs) {
-                const res = await fetch(`${apiEndpoint}/${fav.type}/${fav.item_id}?api_key=${state.apiKey}&language=tr-TR`)
-                    .then((res) => res.json());
-
-                if (String(res?.id) !== String(fav.item_id)) continue;
-                let data = {
-                    id: res.id,
-                    title: fav.type === 'movie' ? res.title : res.name,
-                    decimal_rating: res.vote_average,
-                    release_date: fav.type === 'movie' ? res.release_date : res.first_air_date,
-                    poster_url: `https://image.tmdb.org/t/p/w500/${res.poster_path}`,
-                    item_type: fav.type
-                };
-
-                if (fav.type === 'movie') {
-                    movies.push(data);
-                } else {
-                    tvs.push(data);
-                }
-            }
-
-            state.userFavs = [ ...movies, ...tvs ];
+            state.userFavs = await getUserFavMovies({
+                userFavs,
+                apiEndpoint,
+                apiKey: state.apiKey
+            });
         },
         removeFromFavs(state, { id, type }) {
             state.userFavs = state.userFavs.filter(f => !(f.id === id && f.item_type === type));
@@ -194,30 +117,23 @@ export default createStore({
 
             let results = [...movRes?.results, ...tvRes?.results];
 
-            state.searchResults = results.map(m => ({
-                id: m.id,
-                title: m.item_type === 'movie' ? m.title : m.name,
-                decimal_rating: m.vote_average,
-                release_date: m.item_type === 'movie' ? m.release_date : m.first_air_date,
-                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
-                item_type: m.item_type,
-                popularity: m.popularity
-            })).sort((x, y) => x.popularity > y.popularity ? -1 : 1);
+            state.searchResults = results
+                .map(m => castMovieToCover({
+                    movieData: m,
+                    type: m.item_type
+                }))
+                .sort((x, y) => x.popularity > y.popularity ? -1 : 1);
         },
         async getSimilars(state, { id, type }) {
             const res = await fetch(`${apiEndpoint}/${type}/${id}/similar?api_key=${state.apiKey}&language=tr-TR`)
                 .then((res) => res.json());
-
             if (!Array.isArray(res.results)) return;
 
-            let similars = res.results.map((m) => ({
-                id: m.id,
-                title: type === 'movie' ? m.title : m.name,
-                decimal_rating: m.vote_average,
-                release_date: type === 'movie' ? m.release_date : m.first_air_date,
-                poster_url: `https://image.tmdb.org/t/p/w500/${m.poster_path}`,
-                item_type: type
+            let similars = res.results.map((m) => castMovieToCover({
+                movieData: m,
+                type
             }));
+
             state.currentMovieSimilars = similars.splice(0, 4);
         }
     }
