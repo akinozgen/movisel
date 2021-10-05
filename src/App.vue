@@ -47,7 +47,7 @@ body {
 }
 
 .sub-title {
-  text-align: center;
+  text-align: left;
 }
 
 .form {

@@ -1,4 +1,5 @@
 import SupaBase from "../stores/SupaBase";
+import AuthStore from "../stores/AuthStore";
 
 export const getIndexOf = ({ array, key1, key2 }) => {
     return array.indexOf( array.filter((l) => l[key1] === key2)[0] );
@@ -63,4 +64,11 @@ export const getUser = async ({ user_id }) => {
     if (userError) return null;
 
     return userData[0];
+};
+
+export const isFollowingUser = ({ user_id }) => {
+    return AuthStore
+        .state
+        .userFollows
+        .filter((user) => parseInt(user) === parseInt(user_id)).length > 0;
 };

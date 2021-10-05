@@ -21,7 +21,9 @@ import {
     faPlus,
     faTimes,
     faPhotoVideo,
-    faUsers
+    faUsers,
+    faUserPlus,
+    faUserMinus
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
@@ -48,7 +50,9 @@ library.add(
     faPlus,
     faTimes,
     faPhotoVideo,
-    faUsers
+    faUsers,
+    faUserPlus,
+    faUserMinus
 );
 
 createApp(App)

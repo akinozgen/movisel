@@ -251,6 +251,20 @@ export default createStore({
             });
             if (!(typeof index === 'number' && index >= 0)) return;
             state.userLists[index].movies.push(movie_data);
+        },
+
+        async unfollow(state, { user_id, callback }) {
+            const { error: deleteError } = await dbDelete({
+                table: 'follows',
+                match: { following: user_id, followed: state.userData.id }
+            });
+
+            if (!deleteError) return;
+
+            this.userFollows = this
+                .userFollows
+                .filter((f) => !(f.following === user_id && f.followed === state.userData.id));
+            callback();
         }
     }
 });

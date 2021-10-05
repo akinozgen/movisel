@@ -3,11 +3,13 @@
     <div class="row margin-top-5em">
       <div class="half">
         <h1 class="sub-title">
-          Takip Edilenler
+          Takip Ettiklerim
         </h1>
         <div class="grid">
           <div v-if="following.length > 0">
-            <user v-for="(user, index) in following" :user-data="user" :key="index+1" />
+            <user v-for="(user, index) in following"
+                  :user-data="user"
+                  :key="index+1" />
           </div>
           <Loading v-else />
         </div>
@@ -18,7 +20,9 @@
         </h1>
         <div class="grid">
           <div v-if="followers.length > 0">
-            <user v-for="(user, index) in followers" :user-data="user" :key="(index+1)*2" />
+            <user v-for="(user, index) in followers"
+                  :user-data="user"
+                  :key="(index+1)*2" />
           </div>
           <Loading v-else />
         </div>
@@ -31,7 +35,7 @@
 import AuthStore from "../stores/AuthStore";
 import User from "../components/User";
 import Loading from "../components/Loading";
-import {getUser} from "../helpers/authDataHelpers";
+import { getUser } from "../helpers/authDataHelpers";
 
 export default {
   name: "Takip",
@@ -58,17 +62,11 @@ export default {
             .map(async (user_id) => await getUser({ user_id }))
             .filter((userData) => typeof userData === 'object')
         );
-    }
+    },
   },
   mounted() {
-    this.getFollowing();
-    this.getFollowers();
-  },
-  watch: {
-    'AuthStore.state.userData': function () {
       this.getFollowing();
       this.getFollowers();
-    }
   }
 }
 </script>
