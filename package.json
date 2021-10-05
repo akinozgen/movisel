@@ -18,7 +18,7 @@
     "dotenv": "^10.0.0",
     "v-lazy-image": "^2.0.1",
     "vue": "^3.0.0",
-    "vue-loading-spinner": "^1.0.11",
+    "vue-loading-spinner": "akinozgen/vue-loading-spinner",
     "vue-router": "^4.0.0-0",
     "vue3-carousel": "^0.1.27",
     "vuex": "^4.0.2",

@@ -11,6 +11,7 @@
         <li><router-link to="/">Anasayfa</router-link></li>
         <li><router-link to="/listelerim">Listelerim</router-link></li>
         <li><router-link to="/favorilerim">Favorilerim</router-link></li>
+        <li><router-link to="/takip"><font-awesome-icon icon="users"/></router-link></li>
         <li><router-link to="/cikis"><font-awesome-icon icon="sign-out-alt" /></router-link></li>
       </ul>
       <ul class="nav" v-else>

@@ -53,3 +53,14 @@ export const dbUpdate = ({ table, data, match }) => {
         .update(data)
         .match(match);
 }
+
+export const getUser = async ({ user_id }) => {
+    const { data: userData, error: userError } = await dbSelect({
+        table: 'users',
+        match: { user_id }
+    });
+
+    if (userError) return null;
+
+    return userData[0];
+};

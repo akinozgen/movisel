@@ -42,6 +42,11 @@ const routes = [
     name: 'Cikis',
     component: () => import(/* webpackChunkName: "about" */ '../views/Cikis')
   },
+  {
+    path: '/takip',
+    name: 'Takip',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Takip')
+  },
 ]
 
 const router = createRouter({

@@ -20,7 +20,8 @@ import {
     faSave,
     faPlus,
     faTimes,
-    faPhotoVideo
+    faPhotoVideo,
+    faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb } from '@fortawesome/free-brands-svg-icons';
@@ -46,7 +47,8 @@ library.add(
     faSave,
     faPlus,
     faTimes,
-    faPhotoVideo
+    faPhotoVideo,
+    faUsers
 );
 
 createApp(App)

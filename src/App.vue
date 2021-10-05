@@ -46,6 +46,10 @@ body {
   text-align: center;
 }
 
+.sub-title {
+  text-align: center;
+}
+
 .form {
   display: flex;
   align-items: center;
@@ -100,5 +104,20 @@ body {
 
 .danger-text {
   color: red !important;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.half {
+  flex: 1;
+}
+
+.margin-top-5em {
+  margin-top: 5em;
 }
 </style>
