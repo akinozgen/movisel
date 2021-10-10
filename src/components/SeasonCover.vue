@@ -79,7 +79,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: linear-gradient(to right, #41295a, #2f0743);
+    background-image: linear-gradient(to right, #41295a, #072243);
     border-radius: 10px;
   }
 

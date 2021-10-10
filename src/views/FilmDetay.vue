@@ -331,7 +331,7 @@ export default {
 .genres-list a {
   padding: .5em 1em;
   margin: .2em .5em;
-  background-color: #8a73e7;
+  background-color: #739ce7;
   color: white;
   text-decoration: none;
   border-radius: 100px;
@@ -339,12 +339,12 @@ export default {
 }
 
 .genres-list a:hover {
-  background-color: #27213f;
+  background-color: #21353f;
 }
 
 .links a {
   transition: all .3s ease;
-  border-bottom: 3px solid #8a73e7;
+  border-bottom: 3px solid #739ce7;
   text-decoration: none;
   padding: .5em 1em;
   margin-right: 1em;
@@ -369,7 +369,7 @@ export default {
   text-decoration: none;
   padding: 1em 1.5em;
   display: inline-block;
-  background-color: #8a73e7;
+  background-color: #739ce7;
   margin-left: 2em;
   border-radius: 100px;
   font-size: 0.75em;

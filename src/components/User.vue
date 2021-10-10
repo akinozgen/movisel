@@ -57,7 +57,7 @@ export default {
 <style scoped>
 .user-card {
   flex: 1;
-  background: #8a73e7;
+  background: #739ce7;
   margin: 0 1rem 1rem 0;
   border-radius: 1rem;
   padding: 0.8rem 1.5rem;
@@ -83,7 +83,7 @@ export default {
     11.2px 10px 10.6px -35px rgba(0, 0, 0, 0.059),
     37px 33px 35px -35px rgba(0, 0, 0, 0.09)
   ;
-  border: 5px solid #2f0743;
+  border: 5px solid #072243;
 }
 
 .image-container .v-lazy-image {
@@ -98,14 +98,14 @@ export default {
   right: calc(50% - 3rem);
   padding: 1.2rem;
   border-radius: 4rem;
-  background: #8a73e7;
+  background: #739ce7;
   color: white;
   border: 0;
   box-shadow:
-    0.3px 0.3px 1.6px -35px #8a73e7,
-    3.3px 2.9px 4.4px -35px #8a73e7,
-    11.2px 10px 10.6px -35px #8a73e7,
-    37px 33px 35px -35px #8a73e7
+    0.3px 0.3px 1.6px -35px #739ce7,
+    3.3px 2.9px 4.4px -35px #739ce7,
+    11.2px 10px 10.6px -35px #739ce7,
+    37px 33px 35px -35px #739ce7
   ;
   cursor: pointer;
   transition: all .3s ease;
@@ -114,7 +114,7 @@ export default {
 }
 
 .follow:hover {
-  background: #2f0743;
+  background: #072243;
   box-shadow:
     0.3px 0.3px 1.6px -35px rgba(0, 0, 0, 0.031),
     3.3px 2.9px 4.4px -35px rgba(0, 0, 0, 0.045),

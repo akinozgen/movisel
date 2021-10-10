@@ -22,7 +22,7 @@ export default {
 <style>
 body {
   font-family: 'Alegreya Sans', sans-serif;
-  background-color: #27213f;
+  background-color: #21353f;
   color: white;
   border: 0;
   padding: 0;
@@ -83,7 +83,7 @@ body {
   border-radius: 10px;
   font-size: 1.1em;
   height: 3rem;
-  background-color: #8a73e7;
+  background-color: #739ce7;
   border: 0;
   color: white;
   cursor: pointer;

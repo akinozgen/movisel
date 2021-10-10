@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <rotate-square2 background="rgb(138, 115, 231)"/>
+    <rotate-square2 background="#739ce7"/>
   </div>
 </template>
 

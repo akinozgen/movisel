@@ -64,7 +64,7 @@ export default {
     text-align: center;
     display: inline-block;
     padding: 12px 20px;
-    color: #8a73e7;
+    color: #739ce7;
     font-weight: bold;
     font-size: 2em;
   }
@@ -84,7 +84,7 @@ export default {
   }
 
   .nav .router-link-active.router-link-exact-active {
-    background-color: #745fc9;
+    background-color: #739ce7;
   }
 
   .nav li a {
@@ -102,6 +102,6 @@ export default {
   }
 
   .nav a:hover {
-    background-color: #8a73e7;
+    background-color: #739ce7;
   }
 </style>

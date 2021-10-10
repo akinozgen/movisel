@@ -58,7 +58,7 @@ export default {
 <style scoped>
 .add-list {
   background-color: transparent;
-  border: 4px solid #8a73e7;
+  border: 4px solid #739ce7;
   color: white;
   margin-right: 1em;
   font-size: 1.2rem;

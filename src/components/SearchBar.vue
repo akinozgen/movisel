@@ -98,7 +98,7 @@ export default {
     background-color: white;
     display: block;
     text-decoration: none;
-    color: #27213f;
+    color: #21333f;
     font-size: 1.2rem;
     padding: 12px 20px;
   }

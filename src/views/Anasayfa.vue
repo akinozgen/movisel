@@ -126,9 +126,8 @@ export default {
     margin: 0 1em;
     border-radius: 100px;
     border: 0;
-    background-color: #8a73e7;
+    background-color: #739ce7;
     cursor: pointer;
-
     color: white;
   }
 
@@ -142,7 +141,7 @@ export default {
     font-size: 1.5em;
     width: 3rem;
     height: 3rem;
-    border: 2px solid #8a73e7;
+    border: 2px solid #739ce7;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,8 +180,12 @@ export default {
     font-weight: 600;
     -moz-appearance: none;
     -webkit-appearance: none;
-    border-bottom: 2px solid #8a73e7;
+    border-bottom: 2px solid #739ce7;
     padding: 0 .5em;
+  }
+
+  .type-select-header option {
+    color: black;
   }
 
   .type-select-header::-ms-expand {

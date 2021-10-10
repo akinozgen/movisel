@@ -188,7 +188,7 @@ export default createStore({
                     user_id: state.userData.id,
                     title,
                     description,
-                    poster_url: `http://placehold.it/280x400/44396e?text=${title}`
+                    poster_url: `http://placehold.it/280x400/39636e?text=${title}`
                 }
             });
 

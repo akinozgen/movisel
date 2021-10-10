@@ -2,7 +2,7 @@
   <div class="list">
     <div class="image" @click="goToDetails">
       <v-lazy-image :src="listItem.poster_url" v-if="!newList" />
-      <v-lazy-image src="http://placehold.it/280x400/44396e?text=Yeni Liste*" v-else />
+      <v-lazy-image src="http://placehold.it/280x400/39636e?text=Yeni Liste*" v-else />
     </div>
     <div class="details">
 
@@ -100,7 +100,7 @@ export default {
     min-height: 26em;
     border-radius: 10px;
     padding-bottom: 1em;
-    background-color: #44396e;
+    background-color: #39636e;
     box-shadow:
       0 5.4px 8.5px -16px rgba(0, 0, 0, 0.03),
       0 10.3px 15.6px -16px rgba(0, 0, 0, 0.037),
@@ -118,7 +118,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: linear-gradient(to right, #41295a, #2f0743);
+    background-image: linear-gradient(to right, #41295a, #072243);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
   }
@@ -145,14 +145,14 @@ export default {
     color: white;
     text-decoration: none;
     display: inline-block;
-    border: 3px solid #2f0743;
+    border: 3px solid #072243;
     padding: 0.75em 1.3em;
     border-radius: 100px;
     transition: all .3s ease;
   }
 
   .actions a:hover, .actions a.edit-mode-active {
-    background-color: #2f0743;
+    background-color: #072243;
   }
 
   .actions a svg {
@@ -171,7 +171,7 @@ export default {
     font-size: 1.2em;
     text-align: center;
     border: 0;
-    border-bottom: 2px solid #8a73e7;
+    border-bottom: 2px solid #739ce7;
     background-color: transparent;
     color: white;
   }

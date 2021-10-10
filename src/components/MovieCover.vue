@@ -19,16 +19,14 @@
       <span class="rating"><span v-text="movieData?.decimal_rating"></span>/10</span>
     </div>
     <div class="actions" v-if="AuthStore.state.isLoggedIn">
-      <div v-if="this.listItem">
-        <a href="javascript:void(0)" class="make-cover" @click="makeCover">
-          <font-awesome-icon icon="photo-video" />
-          Liste Kapağı Yap
-        </a>
-        <a href="javascript:void(0)" class="danger-text" @click="removeFromList">
-          <font-awesome-icon icon="times" />
-          Listeden Çıkar
-        </a>
-      </div>
+      <a href="javascript:void(0)" class="make-cover" @click="makeCover" v-if="this.listItem">
+        <font-awesome-icon icon="photo-video" />
+        Liste Kapağı Yap
+      </a>
+      <a href="javascript:void(0)" class="danger-text" @click="removeFromList" v-if="this.listItem">
+        <font-awesome-icon icon="times" />
+        Listeden Çıkar
+      </a>
 
       <a tabindex="1"
          href="javascript:void(0)"
@@ -154,7 +152,7 @@ export default {
     min-height: 26em;
     border-radius: 10px;
     padding-bottom: 1em;
-    background-color: #44396e;
+    background-color: #39636e;
     box-shadow:
       0 5.4px 8.5px -16px rgba(0, 0, 0, 0.03),
       0 10.3px 15.6px -16px rgba(0, 0, 0, 0.037),
@@ -190,7 +188,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: linear-gradient(to right, #41295a, #2f0743);
+    background-image: linear-gradient(to right, #41295a, #072243);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
   }
@@ -216,13 +214,20 @@ export default {
 
   .movie-cover .actions a {
     color: white;
-    padding: 0.5em 1em;
     text-decoration: none;
-    text-align: center;
+    width: 100% ;
+    display: inline-block;
+    margin-bottom: 0.2em;
+    text-align: left;
+    padding: 0.1em 0.5em;
+  }
+
+  .movie-cover .actions {
+    flex-wrap: wrap;
   }
 
   .fav-buttons .fav {
-    color: #8a73e7;
+    color: #739ce7;
   }
   .glowing::after{
     content: '';
