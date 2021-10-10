@@ -7,10 +7,10 @@
 import Header from "./components/Header";
 
 export default {
-  name: 'Moviwen',
+  name: 'Movisel',
   data() {
     return {
-      appName: 'Moviwen'
+      appName: 'Movisel'
     }
   },
   components: {
