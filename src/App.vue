@@ -21,7 +21,7 @@ export default {
 
 <style>
 body {
-  font-family: 'Alegreya Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #21353f;
   color: white;
   border: 0;
