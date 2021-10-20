@@ -1,0 +1,56 @@
+table: favs
+Column Name    | Type          | Default | Primary | Null | Is Identity
+------------------------------------------------------------------------
+id             | int8          | NULL    | yes     | no   | yes
+item_id        | int8          | NULL    | no      | no   | no
+type           | varchar       | NULL    | no      | no   | no
+user_id        | text          | NULL    | no      | no   | no
+created_at     | timestampz    | now()   | no      | yes  | no
+updated_at     | timestampz    | now()   | no      | yes  | no
+------------------------------------------------------------------------
+
+
+table: follows
+Column Name    | Type          | Default | Primary | Null | Is Identity
+------------------------------------------------------------------------
+id             | int8          | NULL    | yes     | no   | yes
+created_at     | timestampz    | now()   | no      | yes  | no
+updated_at     | timestampz    | now()   | no      | yes  | no
+following      | text          | NULL    | no      | no   | no
+followed       | text          | NULL    | no      | no   | no
+
+
+table: list_items
+Column Name    | Type          | Default | Primary | Null | Is Identity
+------------------------------------------------------------------------
+id             | int8          | NULL    | yes     | no   | yes
+item_id        | int8          | NULL    | no      | no   | no
+user_id        | text          | NULL    | no      | no   | no
+list_id        | int8          | NULL    | no      | no   | no
+type           | varchar       | NULL    | no      | no   | no
+created_at     | timestampz    | now()   | no      | yes  | no
+updated_at     | timestampz    | now()   | no      | yes  | no
+
+
+table: lists
+Column Name    | Type          | Default | Primary | Null | Is Identity
+------------------------------------------------------------------------
+id             | int8          | NULL    | yes     | no   | yes
+user_id        | text          | NULL    | no      | no   | no
+title          | text          | NULL    | no      | no   | no
+description    | text          | NULL    | no      | no   | no
+poster_url     | text          | NULL    | no      | no   | no
+created_at     | timestampz    | now()   | no      | yes  | no
+updated_at     | timestampz    | now()   | no      | yes  | no
+
+
+table: users
+Column Name    | Type          | Default | Primary | Null | Is Identity
+------------------------------------------------------------------------
+id             | int8          | NULL    | yes     | no   | yes
+username       | text          | NULL    | no      | no   | no
+profile_picture| text          | NULL    | no      | no   | no
+bio            | text          | NULL    | no      | no   | no
+user_id        | text          | NULL    | no      | no   | no
+created_at     | timestampz    | now()   | no      | yes  | no
+updated_at     | timestampz    | now()   | no      | yes  | no
