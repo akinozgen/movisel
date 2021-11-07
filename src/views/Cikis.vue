@@ -2,19 +2,17 @@
   <p class="center">Çıkış Yapılıyor</p>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import SupaBase from "../stores/SupaBase";
 import router from "../router";
+import { onMounted } from "@vue/runtime-core";
 
-export default {
-  name: "Cikis",
-  async mounted() {
-    await SupaBase.state.supabase.auth.signOut();
-    AuthStore.commit('logOut');
-    await router.push('/');
-  }
-}
+onMounted(async () => {
+  await SupaBase.state.supabase.auth.signOut();
+  AuthStore.commit('logOut');
+  await router.push('/');
+});
 </script>
 
 <style scoped>

@@ -12,30 +12,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import MovieCover from "../components/MovieCover";
 import TMDBStore from "../stores/TMDBStore";
 import router from "../router";
+import { onMounted } from "@vue/runtime-core";
 
-export default {
-  name: "Favorilerim",
-  components: { MovieCover },
-  data() {
-    return { AuthStore, TMDBStore, };
-  },
-  methods: {
-  },
-  mounted() {
-    if (!AuthStore.state.isLoggedIn) {
-      return router.push('/');
-    }
-
-    TMDBStore.commit('getUserFavs', {
-      userFavs: AuthStore.state.userFavs
-    });
+onMounted(() => {
+  if (!AuthStore.state.isLoggedIn) {
+    return router.push('/');
   }
-}
+
+  TMDBStore.commit('getUserFavs', {
+    userFavs: AuthStore.state.userFavs
+  });
+});
 </script>
 
 <style scoped>

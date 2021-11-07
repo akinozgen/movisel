@@ -137,117 +137,106 @@
   </div>
 </template>
 
-<script>
-import vLazyImage from 'v-lazy-image';
-import { Carousel, Slide, Navigation } from 'vue3-carousel';
-import MovieCover from "../components/MovieCover";
-import AuthStore from "../stores/AuthStore";
-import TMDBStore from "../stores/TMDBStore";
-import SeasonCover from "../components/SeasonCover";
-import Cast from "../components/Cast";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
+<script setup>
 import 'vue3-carousel/dist/carousel.css';
 import '../styles/dropdown.css';
 
-export default {
-  name: "FilmDetay",
-  components: {
-    vLazyImage,
-    Carousel,
-    Slide,
-    SeasonCover,
-    Cast,
-    FontAwesomeIcon,
-    Navigation,
-    MovieCover
-  },
-  data() {
-    return {
-      AuthStore,
-      movieId: 0,
-      TMDBStore,
-      tmdbMovieStatuses,
-      type: 'movie',
-      dropdownOpen: false
-    };
-  },
-  async mounted() {
-    this.movieId = this.$route.params.id;
-    this.type = this.$route.params.type;
-    await this.getMovieData();
-  },
-  methods: {
-    async getMovieData() {
-      TMDBStore.commit('getMovieData', {
-        id: this.movieId,
-        type: this.type
-      });
-      TMDBStore.commit('getMovieCredits', {
-        id: this.movieId,
-        type: this.type
-      });
-      TMDBStore.commit('getSimilars', {
-        id: this.movieId,
-        type: this.type
-      });
-    },
-    addToFavs() {
-      if (!AuthStore.state.isLoggedIn) return false;
-      AuthStore.commit('addToFavs', {
-        id: this.movieId,
-        type: this.type
-      });
-    },
-    removeFromFavs() {
-      if (!AuthStore.state.isLoggedIn) return false;
-      AuthStore.commit('removeFromFavs', {
-        id: this.movieId,
-        type: this.type
-      });
-    },
-    isFav() {
-      if (!AuthStore.state.isLoggedIn)
-        return false;
+import tmdbMovieStatuses from "../helpers/tmdbMovieStatuses";
+import SeasonCover from "../components/SeasonCover";
+import MovieCover from "../components/MovieCover";
+import AuthStore from "../stores/AuthStore";
+import TMDBStore from "../stores/TMDBStore";
+import vLazyImage from 'v-lazy-image';
+import Cast from "../components/Cast";
 
-      let inFavs = AuthStore
-          .state
-          .userFavs
-          .filter(f => parseInt(f?.item_id) === parseInt(this.movieId) && f?.type === this.type);
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import { computed, ref } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
+import { onMounted, watch } from '@vue/runtime-core';
 
-      return inFavs.length > 0;
-    },
-    addToList(event) {
-      let listId = event.currentTarget.dataset.list;
-      let movieData = TMDBStore.state.currentMovieDetail;
-      AuthStore.commit('addToList', {
-        item_id: TMDBStore.state.currentMovieDetail.id,
-        list_id: listId,
-        item_type: TMDBStore.state.currentMovieDetail.item_type,
-        movie_data: {
-          id: movieData.id,
-          title: movieData.item_type === 'movie' ? movieData.title : movieData.name,
-          decimal_rating: movieData.vote_average,
-          release_date: movieData.item_type === 'movie' ? movieData.release_date : movieData.first_air_date,
-          poster_url: `https://image.tmdb.org/t/p/w500/${movieData.poster_path}`,
-          item_type: movieData.item_type
-        }
-      });
-    },
-    toggleDropdown() {
-      this.dropdownOpen = !this.dropdownOpen;
-    },
-  },
+const $route = computed(() => useRouter().currentRoute.value);
+const movieId = ref(0);
+const type = ref('movie');
+const dropdownOpen = ref(false);
 
-  watch: {
-    '$route'() {
-      const { id, type } = this.$route.params;
-      this.movieId = id;
-      this.type = type;
-      this.getMovieData();
-    }
-  },
+onMounted (() => {
+  movieId.value = $route.value.params.id;
+  type.value = $route.value.params.type;
+  getMovieData();
+});
+
+function getMovieData() {
+  TMDBStore.commit('getMovieData', {
+    id: movieId.value,
+    type: type.value
+  });
+  TMDBStore.commit('getMovieCredits', {
+    id: movieId.value,
+    type: type.value
+  });
+  TMDBStore.commit('getSimilars', {
+    id: movieId.value,
+    type: type.value
+  });
 }
+
+function addToFavs() {
+  if (!AuthStore.state.isLoggedIn) return false;
+  AuthStore.commit('addToFavs', {
+    id: movieId.value,
+    type: type.value
+  });
+}
+
+function removeFromFavs() {
+  if (!AuthStore.state.isLoggedIn) return false;
+  AuthStore.commit('removeFromFavs', {
+    id: movieId.value,
+    type: type.value
+  });
+}
+
+function isFav() {
+  if (!AuthStore.state.isLoggedIn)
+    return false;
+
+  let inFavs = AuthStore
+      .state
+      .userFavs
+      .filter(f => parseInt(f?.item_id) === parseInt(movieId.value) && f?.type === type.value);
+
+  return inFavs.length > 0;
+}
+
+function addToList(event) {
+  let listId = event.currentTarget.dataset.list;
+  let movieData = TMDBStore.state.currentMovieDetail;
+  AuthStore.commit('addToList', {
+    item_id: TMDBStore.state.currentMovieDetail.id,
+    list_id: listId,
+    item_type: TMDBStore.state.currentMovieDetail.item_type,
+    movie_data: {
+      id: movieData.id,
+      title: movieData.item_type === 'movie' ? movieData.title : movieData.name,
+      decimal_rating: movieData.vote_average,
+      release_date: movieData.item_type === 'movie' ? movieData.release_date : movieData.first_air_date,
+      poster_url: `https://image.tmdb.org/t/p/w500/${movieData.poster_path}`,
+      item_type: movieData.item_type
+    }
+  });
+}
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value;
+}
+
+watch(() => $route, () => {
+  const { id, type: movieType } = $route.value.params;
+  movieId.value = id;
+  type.value = movieType;
+  getMovieData();
+});
 </script>
 
 <style scoped>
