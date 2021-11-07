@@ -31,44 +31,41 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import User from "../components/User";
 import Loading from "../components/Loading";
 import { getUser } from "../helpers/authDataHelpers";
+import { ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
 
-export default {
-  name: "Takip",
-  components: { User, Loading },
-  data() {
-    return { AuthStore, following: [], followers: [] };
-  },
-  methods: {
-    async getFollowing() {
-      this.following = await Promise.all(
-          AuthStore
-            .state
-            .userFollows
-            .map(async (user_id) => await getUser({ user_id }))
-            .filter((userData) => typeof userData === 'object')
-        );
-    },
+const following = ref([]);
+const followers = ref([]);
 
-    async getFollowers() {
-      this.followers = await Promise.all(
-          AuthStore
-            .state
-            .userFollwed
-            .map(async (user_id) => await getUser({ user_id }))
-            .filter((userData) => typeof userData === 'object')
-        );
-    },
-  },
-  mounted() {
-      this.getFollowing();
-      this.getFollowers();
-  }
+async function getFollowing() {
+  following.value = await Promise.all(
+      AuthStore
+        .state
+        .userFollows
+        .map(async (user_id) => await getUser({ user_id }))
+        .filter((userData) => typeof userData === 'object')
+    );
 }
+
+async function getFollowers() {
+  followers.value = await Promise.all(
+      AuthStore
+        .state
+        .userFollwed
+        .map(async (user_id) => await getUser({ user_id }))
+        .filter((userData) => typeof userData === 'object')
+    );
+}
+
+onMounted(async () => {
+  await getFollowing();
+  await getFollowers();
+});
 </script>
 
 <style scoped>

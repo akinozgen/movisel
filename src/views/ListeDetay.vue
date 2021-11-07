@@ -16,31 +16,30 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import MovieCover from "../components/MovieCover";
 import router from "../router";
+import { computed } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 
-export default {
-  name: "ListeDetay",
-  components: { MovieCover },
-  data() {
-    return { listData: this.getListData() }
-  },
-  methods: {
-    getListData() {
-      if (!AuthStore.state.isLoggedIn) {
-        return router.push('/');
-      }
-      return AuthStore.state.userLists.filter(l => l.id === parseInt(this.$route.params.id.toString()))[0];
-    }
-  },
-  mounted() {
-    if (!AuthStore.state.isLoggedIn) {
-      return router.push('/');
-    }
+const $route = computed(() => useRouter().currentRoute.value);
+const listData = computed(() => getListData());
+
+function getListData() {
+  if (!AuthStore.state.isLoggedIn) {
+    return router.push('/');
   }
+  
+  return AuthStore.state.userLists.filter(l => l.id === parseInt($route.value.params.id.toString()))[0];
 }
+
+onMounted(() => {
+  if (!AuthStore.state.isLoggedIn) {
+    router.push('/');
+  }
+});
 </script>
 
 <style scoped>

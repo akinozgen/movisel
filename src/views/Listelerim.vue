@@ -3,7 +3,7 @@
     <div class="header">
       <h1 class="page-title">
         <small>
-          <button class="add-list" @click.prevent="this.toggleCreateMode">
+          <button class="add-list" @click.prevent="toggleCreateMode">
             <font-awesome-icon
                 :icon="createMode ? 'times' : 'plus'"
                 :color="createMode ? 'red' : 'white'" />
@@ -17,42 +17,39 @@
           v-if="createMode"
           :list-item="{}"
           :new-list-mode="true"
-          :on-cancel="this.toggleCreateMode"
-          :on-save="this.addList" />
+          :on-cancel="toggleCreateMode"
+          :on-save="addList" />
       <list-cover v-for="list in AuthStore.state.userLists" :key="list.id" :list-item="list" />
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import ListCover from "../components/ListCover";
 import router from "../router";
+import { ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
 
-export default {
-  name: "Listelerim",
-  components: {ListCover},
-  data() {
-    return { AuthStore, ListCover, createMode: false, newListTitle: '', newListDescription: '' };
-  },
-  methods: {
-    toggleCreateMode() {
-      this.createMode = !this.createMode;
-    },
-    addList(title, description) {
-      AuthStore.commit('addList', {
-        title,
-        description
-      });
-      this.createMode = false;
-    }
-  },
-  mounted() {
-    if (!AuthStore.state.isLoggedIn) {
-      return router.push('/');
-    }
-  }
+const createMode = ref(false);
+
+function toggleCreateMode() {
+  createMode.value = !createMode.value;
 }
+
+function addList(title, description) {
+  AuthStore.commit('addList', {
+    title,
+    description
+  });
+  createMode.value = false;
+}
+
+onMounted(() => {
+  if (!AuthStore.state.isLoggedIn) {
+    return router.push('/');
+  }
+});
 </script>
 
 <style scoped>

@@ -20,45 +20,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthStore from "../stores/AuthStore";
 import SupaBase from "../stores/SupaBase";
 import router from "../router";
+import { ref } from "@vue/reactivity";
 
-export default {
-  name: "GirisYap",
-  data() {
-    return {
-      email: '',
-      password: '',
-      inProgress: false
-    }
-  },
-  methods: {
-    async login() {
-      this.inProgress = true;
-      if (AuthStore.state.isLoggedIn) return window.location = '/';
+const email = ref("");
+const password = ref("");
+const inProgress = ref(false);
+
+async function login() {
+      inProgress.value = true;
+      if (AuthStore.state.isLoggedIn) return router.push('/');
 
       const { error, user } = await SupaBase.state.supabase.auth.signIn({
-        email: this.email,
-        password: this.password
+        email: email.value,
+        password: password.value
       });
 
-
       if (error) {
-        this.inProgress = false;
+        inProgress.value = false;
         return alert(error.message);
       }
 
       AuthStore.commit('login', user);
 
-      this.inProgress = false;
-      this.email = '';
-      this.password = '';
+      inProgress.value = false;
+      email.value = '';
+      password.value = '';
       await router.push('/');
     }
-  }
-}
 </script>
 
 <style scoped>
