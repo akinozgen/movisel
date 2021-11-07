@@ -4,13 +4,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { RotateSquare2 } from 'vue-loading-spinner';
-
-export default {
-  name: "Loading",
-  components: { RotateSquare2 }
-}
 </script>
 
 <style scoped>

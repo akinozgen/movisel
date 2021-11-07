@@ -10,24 +10,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import vLazyImage from 'v-lazy-image';
-
-export default {
-  name: "SeasonCover",
-  components: { vLazyImage },
-  data() {
-    return { expanded: false };
-  },
-  props: {
-    seasonData: Object
-  },
-  methods: {
-    expand() {
-      this.expanded = !this.expanded;
-    }
-  }
-}
 </script>
 
 <style scoped>

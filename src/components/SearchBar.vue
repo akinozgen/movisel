@@ -16,24 +16,18 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TMDBStore from "../stores/TMDBStore";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { ref } from "@vue/reactivity";
 
-export default {
-  name: "SearchBar",
-  components: { FontAwesomeIcon },
-  data() {
-    return { TMDBStore, searchTerm: '' };
-  },
-  methods: {
-    search() {
-      if (this.searchTerm.length <= 3) return;
-      TMDBStore.commit('search', {
-        query: this.searchTerm
-      });
-    }
-  },
+const searchTerm = ref("");
+
+function search() {
+  if (searchTerm.value.length <= 3) return;
+  TMDBStore.commit('search', {
+    query: searchTerm.value
+  });
 }
 </script>
 

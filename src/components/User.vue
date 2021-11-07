@@ -23,34 +23,30 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
 import vLazyImage from 'v-lazy-image';
 import {isFollowingUser} from "../helpers/authDataHelpers";
-import autoLink from 'autolink-js';
+import 'autolink-js';
 import AuthStore from "../stores/AuthStore";
 
-export default {
-  name: "User",
-  props: {
-    userData: Object,
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: true,
   },
-  data() {
-    return { autoLink };
-  },
-  components: { vLazyImage },
-  methods: {
-    isFollowing() {
-      return isFollowingUser({ user_id: this.userData.user_id });
-    },
-    follow() {
+});
 
-    },
-    unfollow() {
-      AuthStore.commit('unfollow', {
-        user_id: this.userData.user_id
-      });
-    }
-  }
+function follow() {}
+
+function unfollow() {
+  AuthStore.commit('unfollow', {
+    user_id: props.userData.user_id
+  });
+}
+
+function isFollowing() {
+  return isFollowingUser({ user_id: props.userData.user_id });
 }
 </script>
 

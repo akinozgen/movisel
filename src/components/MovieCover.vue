@@ -46,86 +46,86 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import vLazyImage from 'v-lazy-image';
 import AuthStore from "../stores/AuthStore";
 import router from "../router";
+import { defineProps } from 'vue';
+import { ref } from "@vue/reactivity";
 import '../styles/dropdown.css';
 
-export default {
-  data() {
-    return { AuthStore, dropdownOpen: false };
+const props = defineProps({
+  movieData: Object,
+  listItem: {
+    type: Boolean,
+    default: false
   },
-  props: {
-    movieData: Object,
-    listItem: {
-      type: Boolean,
-      default: false
-    },
-    listId: {
-      type: Number,
-      default: 0
-    }
-  },
-  methods: {
-    addToFavs() {
-      if (!AuthStore.state.isLoggedIn) return false;
-      AuthStore.commit('addToFavs', {
-        id: this.movieData.id,
-        type: this.movieData.item_type
-      });
-    },
-    removeFromFavs() {
-      if (!AuthStore.state.isLoggedIn) return false;
-      AuthStore.commit('removeFromFavs', {
-        id: this.movieData.id,
-        type: this.movieData.item_type
-      });
-    },
-    addToList(event) {
-      let listId = event.currentTarget.dataset.list;
-      AuthStore.commit('addToList', {
-        item_id: this.movieData.id,
-        list_id: listId,
-        item_type: this.movieData.item_type,
-        movie_data: this.movieData
-      });
-    },
-    toggleDropdown() {
-      this.dropdownOpen = !this.dropdownOpen;
-    },
-    removeFromList() {
-      AuthStore.commit('removeFromList', {
-        id: this.listId,
-        item_id: this.movieData.id,
-        type: this.movieData.item_type,
-      });
-    },
-    makeCover() {
-      AuthStore.commit('makeCoverForList', {
-        id: this.listId,
-        cover: this.movieData.poster_url
-      });
-    },
-    isFav() {
-      if (!AuthStore.state.isLoggedIn)
-        return false;
-      let inFavs = AuthStore
-          .state
-          .userFavs
-          .filter(f => f?.item_id === this.movieData.id && f?.type === this.movieData.item_type);
+  listId: {
+    type: Number,
+    default: 0
+  }
+});
 
-      return inFavs.length > 0;
-    },
-    gotoDetailPage() {
-      router.push(`/detay/${this.movieData.item_type}/${this.movieData.id}`);
-    }
-  },
-  mounted() {
-    this.fav = this.isFav(this.movieData.id, this.movieData.item_type);
-  },
-  name: "MovieCover",
-  components: { vLazyImage },
+const dropdownOpen = ref(false);
+
+function addToFavs() {
+  if (!AuthStore.state.isLoggedIn) return false;
+  AuthStore.commit('addToFavs', {
+    id: props.movieData.id,
+    type: props.movieData.item_type
+  });
+}
+
+function removeFromFavs() {
+  if (!AuthStore.state.isLoggedIn) return false;
+  AuthStore.commit('removeFromFavs', {
+    id: props.movieData.id,
+    type: props.movieData.item_type
+  });
+}
+
+function addToList(event) {
+  let listId = event.currentTarget.dataset.list;
+  AuthStore.commit('addToList', {
+    item_id: props.movieData.id,
+    list_id: listId,
+    item_type: props.movieData.item_type,
+    movie_data: props.movieData
+  });
+}
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value;
+}
+
+function removeFromList() {
+  AuthStore.commit('removeFromList', {
+    id: props.listId,
+    item_id: props.movieData.id,
+    type: props.movieData.item_type,
+  });
+}
+
+function makeCover() {
+  AuthStore.commit('makeCoverForList', {
+    id: props.listId,
+    cover: props.movieData.poster_url
+  });
+}
+
+function isFav() {
+  if (!AuthStore.state.isLoggedIn)
+    return false;
+  let inFavs = AuthStore
+      .state
+      .userFavs
+      .filter(f => f?.item_id === props.movieData.id && f?.type === props.movieData.item_type);
+
+  return inFavs.length > 0;
+}
+
+function gotoDetailPage() {
+  router.push(`/detay/${props.movieData.item_type}/${props.movieData.id}`);
 }
 </script>
 
