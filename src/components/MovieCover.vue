@@ -19,11 +19,11 @@
       <span class="rating"><span v-text="movieData?.decimal_rating"></span>/10</span>
     </div>
     <div class="actions" v-if="AuthStore.state.isLoggedIn">
-      <a href="javascript:void(0)" class="make-cover" @click="makeCover" v-if="this.listItem">
+      <a href="javascript:void(0)" class="make-cover" @click="makeCover" v-if="props.listItem">
         <font-awesome-icon icon="photo-video" />
         Liste Kapağı Yap
       </a>
-      <a href="javascript:void(0)" class="danger-text" @click="removeFromList" v-if="this.listItem">
+      <a href="javascript:void(0)" class="danger-text" @click="removeFromList" v-if="props.listItem">
         <font-awesome-icon icon="times" />
         Listeden Çıkar
       </a>
