@@ -115,7 +115,7 @@
                 items-to-show="5"
                 :mouseDrag="false"
                 :currentSlide="5">
-        <slide v-for="cast in TMDBStore.state.movieCredits[this.movieId]" :key="cast.id">
+        <slide v-for="cast in TMDBStore.state.movieCredits[movieId]" :key="cast.id">
           <Cast v-bind:cast="cast" />
         </slide>
         <template #addons>
