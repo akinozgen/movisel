@@ -66,7 +66,7 @@ export default createStore({
             if (!Array.isArray(popRes?.results)) return;
 
             state.showcaseMaxPages = parseInt(popRes.total_pages);
-            state.showcaseMovies = popRes.results.map(m => castMovieToCover({ movieData: m, type }));
+            state.showcaseMovies = popRes.results.map(m => castMovieToCover({ movieData: m, type: type }));
         },
         async getMovieData(state, {id, type}) {
             const movRes = await fetch(`${apiEndpoint}/${type}/${id}?api_key=${state.apiKey}&language=tr-TR&`)
