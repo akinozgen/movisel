@@ -48,55 +48,57 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TMDBStore from "../stores/TMDBStore";
 import MovieCover from "../components/MovieCover";
+import { ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
 
-export default {
-  name: "Anasayfa",
-  data() {
-    return { TMDBStore, isLoading: true, type: 'movie' };
-  },
-  methods: {
-    async nextPage() {
-      if (this.TMDBStore.state.activePage === TMDBStore.state.showcaseMaxPages) return;
-      this.isLoading = true;
-      this.TMDBStore.state.activePage++;
-      await this.loadShowcaseMovies();
-      this.isLoading = false;
-    },
-    async prevPage() {
-      if (this.TMDBStore.state.activePage === 1) return;
-      this.isLoading = true;
-      this.TMDBStore.state.activePage--;
-      await this.loadShowcaseMovies();
-      this.isLoading = false;
-    },
-    async firstPage() {
-      this.isLoading = true;
-      this.TMDBStore.state.activePage = 1;
-      await this.loadShowcaseMovies();
-      this.isLoading = false;
-    },
-    async loadShowcaseMovies() {
-      await TMDBStore.commit('loadShowcaseMovies', {
-        page: this.TMDBStore.state.activePage,
-        type: this.type
-      });
+const isLoading = ref(false);
+const type = ref('movie');
 
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-    async changeType() {
-      await this.loadShowcaseMovies();
-    }
-  },
-  components: {MovieCover},
-  mounted() {
-    this.isLoading = false;
-    if (TMDBStore.state.showcaseMovies.length > 0) return;
-    this.loadShowcaseMovies();
-  }
+onMounted(() => {
+  isLoading.value = false;
+  if (TMDBStore.state.showcaseMovies.length > 0) return;
+  loadShowcaseMovies();
+});
+
+async function changeType() {
+  await loadShowcaseMovies();
 }
+
+async function nextPage() {
+  if (TMDBStore.state.activePage === TMDBStore.state.showcaseMaxPages) return;
+  isLoading.value = true;
+  TMDBStore.state.activePage++;
+  await loadShowcaseMovies();
+  isLoading.value = false;
+}
+
+async function prevPage() {
+  if (TMDBStore.state.activePage === 1) return;
+  isLoading.value = true;
+  TMDBStore.state.activePage--;
+  await loadShowcaseMovies();
+  isLoading.value = false;
+}
+
+async function firstPage() {
+  isLoading.value = true;
+  TMDBStore.state.activePage = 1;
+  await loadShowcaseMovies();
+  isLoading.value = false;
+}
+
+async function loadShowcaseMovies() {
+  await TMDBStore.commit('loadShowcaseMovies', {
+    page: TMDBStore.state.activePage,
+    type: type.value
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 </script>
 
 <style>
