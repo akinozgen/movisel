@@ -26,7 +26,7 @@ import {
     faUserMinus
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { faImdb } from '@fortawesome/free-brands-svg-icons';
+import { faImdb, faGithub } from '@fortawesome/free-brands-svg-icons';
 import TMDBStore from "./stores/TMDBStore";
 import AuthStore from "./stores/AuthStore";
 
@@ -52,7 +52,8 @@ library.add(
     faPhotoVideo,
     faUsers,
     faUserPlus,
-    faUserMinus
+    faUserMinus,
+    faGithub 
 );
 
 createApp(App)
