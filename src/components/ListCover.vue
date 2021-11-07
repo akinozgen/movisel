@@ -30,65 +30,61 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
 import vLazyImage from 'v-lazy-image';
 import AuthStore from "../stores/AuthStore";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import router from "../router";
+import { ref } from "@vue/reactivity";
 
-export default {
-  name: "ListCover",
-  components: { vLazyImage, FontAwesomeIcon },
-  data() {
-    return {
-      editMode: this.newListMode,
-      title: this.listItem.title,
-      description: this.listItem.description,
-      newList: this.newListMode,
-      AuthStore
-    }
-  },
-  props: {
-    listItem: Object,
-    newListMode: Boolean,
-    onCancel: Function,
-    onSave: Function
-  },
-  methods: {
-    toggleEditMode() {
-      if (this.editMode === true) {
-        if (this.newList) {
-          this.onSave(this.title, this.description);
-        } else {
-          this.saveDetails();
-        }
-      }
-      this.editMode = !this.editMode;
-    },
-    saveDetails() {
-      AuthStore.commit('saveListDetails', {
-        title: this.title,
-        description: this.description,
-        id: this.listItem.id
-      });
-    },
-    deleteList() {
-      if (this.newList) {
-        this.onCancel();
-        return ;
-      }
-      const answer = confirm('Listeyi silmek istiyor musunuz?');
-      if (!answer) return;
+const props = defineProps({
+  listItem: Object,
+  newListMode: Boolean,
+  onCancel: Function,
+  onSave: Function
+});
 
-      AuthStore.commit('deleteList', {
-        id: this.listItem.id
-      });
-    },
-    goToDetails() {
-      if (this.newList) return;
-      router.push(`/liste/${this.listItem.id}`);
+const editMode = ref(props.newListMode);
+const title = ref(props.listItem.title);
+const description = ref(props.listItem.description);
+const newList = ref(props.newListMode);
+
+function toggleEditMode() {
+  if (editMode.value === true) {
+    if (newList.value) {
+      props.onSave(title.value, description.value);
+    } else {
+      saveDetails();
     }
   }
+  editMode.value = !editMode.value;
+}
+
+function saveDetails() {
+  AuthStore.commit('saveListDetails', {
+    title: title.value,
+    description: description.value,
+    id: props.listItem.id
+  });
+}
+
+function deleteList() {
+  if (newList.value) {
+    props.onCancel();
+    return ;
+  }
+  const answer = confirm('Listeyi silmek istiyor musunuz?');
+  if (!answer) return;
+
+  AuthStore.commit('deleteList', {
+    id: props.listItem.id
+  });
+}
+
+function goToDetails() {
+  if (newList.value) return;
+  router.push(`/liste/${props.listItem.id}`);
 }
 </script>
 

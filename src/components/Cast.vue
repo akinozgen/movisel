@@ -6,13 +6,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Cast",
-  props: {
-    cast: Object
+<script setup>
+import { defineProps } from 'vue';
+
+defineProps({
+  cast: {
+    type: Object,
+    required: true
   }
-}
+});
+
 </script>
 
 <style scoped>

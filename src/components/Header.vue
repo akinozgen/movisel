@@ -23,28 +23,21 @@
   </nav>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
 import AuthStore from "../stores/AuthStore";
 import router from "../router";
 import SearchBar from "./SearchBar";
 
-export default {
-  name: "Header",
-  components: {SearchBar},
-  data() {
-    return { AuthStore };
-  },
-  methods: {
-    gotoHomePage() {
-      router.push('/');
-    }
-  },
-  props: {
-    branding: {
-      type: String,
-      required: true
-    }
+defineProps({
+  branding: {
+    type: String,
+    required: true
   }
+});
+
+function gotoHomePage() {
+  router.push('/');
 }
 </script>
 
