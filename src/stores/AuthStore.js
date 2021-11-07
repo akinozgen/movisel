@@ -31,7 +31,8 @@ export default createStore({
             });
 
             if (!favsError) {
-                state.userFavs = favsData;
+                console.log(favsData);
+               // state.userFavs = favsData;
             }
 
             let {data: listData, error: listError} = await dbSelect({
