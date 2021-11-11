@@ -1,11 +1,64 @@
 <template>
-  <div class="movie-cover" v-bind:class="{ glowing: isFav() }">
+  <div class="w-3/12 p-10">
+    <div class="movie--cover card image-full shadow-sm bg-primary text-accent-content">
+      <figure>
+        <v-lazy-image class="w-full" :src="movieData?.poster_url" :alt="movieData?.title" />
+      </figure>
+      <div class="card-body justify-end">
+        <h2 class="card-title">
+          <button class="btn-circle btn-xs btn bg-black bg-opacity-75 border-0 mr-1" @click.prevent="addToFavs" v-if="!isFav()">
+            <font-awesome-icon :icon="['far', 'star']" />
+          </button>
+          <button class="btn-circle btn-xs btn bg-black bg-opacity-75 border-0 mr-1" @click.prevent="removeFromFavs" v-else>
+            <font-awesome-icon :icon="['fas', 'star']" class="fav" />
+          </button>
+          <span class="cursor-pointer" @click="gotoDetailPage();">
+            {{ movieData?.title }}
+          </span>
+        </h2>
+        <div class="bottom">
+          <div class="flex align-baseline justify-between mb-2">
+            <span>
+              <font-awesome-icon icon="calendar" />
+              {{ relaseDateFormatted(movieData?.release_date) }}
+            </span>
+            <span class="font-bold">
+              <font-awesome-icon :icon="['fas', 'star']" />
+              {{ movieData?.decimal_rating }}
+            </span>
+          </div>
+          <p class="w-full">
+            {{ description }}
+          </p>
+        </div>
+        <div class="actions mt-3" v-if="AuthStore.state.isLoggedIn">
+          <a href="javascript:void(0)" class="make-cover" @click="makeCover" v-if="props.listItem">
+            <font-awesome-icon icon="photo-video" />
+            Liste Kapağı Yap
+          </a>
+          <a href="javascript:void(0)" class="danger-text" @click="removeFromList" v-if="props.listItem">
+            <font-awesome-icon icon="times" />
+            Listeden Çıkar
+          </a>
+        
+          <a tabindex="1" href="javascript:void(0)" v-else @click="addToList">
+            <font-awesome-icon icon="plus-square" />
+            Listeye Ekle
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div @click="addToFavs();removeFromFavs();addToList();removeFromList();makeCover();isFav();"></div>
+  </div>
+
+  <!-- div class="movie-cover" v-bind:class="{ glowing: isFav() }">
     <div class="front-content">
       <div class="fav-buttons" v-if="AuthStore.state.isLoggedIn">
-        <button class="add-to-fav" @click.prevent="addToFavs" v-if="!isFav()">
+        <button class="btn-circle btn bg-black bg-opacity-75 border-0 m-2" @click.prevent="addToFavs" v-if="!isFav()">
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
-        <button class="add-to-fav" @click.prevent="removeFromFavs" v-else>
+        <button class="btn-circle btn bg-black bg-opacity-75 border-0 m-2" @click.prevent="removeFromFavs" v-else>
           <font-awesome-icon :icon="['fas', 'star']" class="fav" />
         </button>
       </div>
@@ -30,29 +83,27 @@
 
       <a tabindex="1"
          href="javascript:void(0)"
-         class="add-to-list dropdown-button"
-         @focusin="toggleDropdown"
-         @focusout="toggleDropdown"
+         class="dropdown"
          v-else>
         <font-awesome-icon icon="plus-square" />
         Listeye Ekle
-        <ul tabindex="1" class="dropdown-list" v-bind:class="{ show: dropdownOpen }">
+        <ul tabindex="1" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
           <li v-for="list in AuthStore.state.userLists" :key="list.id">
-            <a @mousedown="addToList" href="javascript:void(0)" :data-list="list.id">{{ list.title }}</a>
+            <a @click="addToList" 
+               :data-list="list.id">{{ list.title }}</a>
           </li>
         </ul>
       </a>
     </div>
-  </div>
+  </div -->
 </template>
 
 <script setup>
+  // movieData?.release_date -> releaseDateFormatted
 import vLazyImage from 'v-lazy-image';
 import AuthStore from "../stores/AuthStore";
 import router from "../router";
 import { defineProps } from 'vue';
-import { ref } from "@vue/reactivity";
-import '../styles/dropdown.css';
 
 const props = defineProps({
   movieData: Object,
@@ -66,7 +117,17 @@ const props = defineProps({
   }
 });
 
-const dropdownOpen = ref(false);
+const relaseDateFormatted = (releaseDate) => {
+  if (releaseDate) {
+    const year = releaseDate.split('-')[0];
+    const month = releaseDate.split('-')[1];
+    const day = releaseDate.split('-')[2];
+    return `${day}.${month}.${year}`;
+  }
+  return '';
+};
+
+const description = String(props.movieData?.short_desc).substring(0, 75) + '...';
 
 function addToFavs() {
   if (!AuthStore.state.isLoggedIn) return false;
@@ -84,18 +145,14 @@ function removeFromFavs() {
   });
 }
 
-function addToList(event) {
-  let listId = event.currentTarget.dataset.list;
-  AuthStore.commit('addToList', {
-    item_id: props.movieData.id,
-    list_id: listId,
-    item_type: props.movieData.item_type,
-    movie_data: props.movieData
-  });
-}
+function addToList() {
+  let type = props.movieData.item_type;
+  let itemId = props.movieData.id;
 
-function toggleDropdown() {
-  dropdownOpen.value = !dropdownOpen.value;
+  AuthStore.commit('openListsModal', {
+    type,
+    itemId 
+  });
 }
 
 function removeFromList() {
@@ -130,6 +187,35 @@ function gotoDetailPage() {
 </script>
 
 <style scoped>
+  .movie--cover * {
+    transition: all .3s ease;
+  }
+
+  .movie--cover::before {
+    transition: all .3s ease;
+    opacity: 0 !important;
+  }
+
+  .movie--cover .bottom {
+    transform: translateY(300%);
+  }
+
+  .movie--cover .card-body {
+    transform: translateY(100%);
+  }
+
+  .movie--cover:hover .card-body {
+    transform: translateY(-10%);
+  }
+
+  .movie--cover:hover .bottom {
+    transform: none;
+  }
+
+  .movie--cover:hover::before {
+    opacity: .85 !important;
+  }
+
   button.add-to-fav {
     border: 0;
     padding: 0.5em;
@@ -193,27 +279,11 @@ function gotoDetailPage() {
     border-top-right-radius: 10px;
   }
 
-  .movie-cover .description {
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-  }
-
-  .movie-cover .title {
-    text-align: center;
-    display: inline-block;
-    width: 100%;
-    min-height: 2em;
-    overflow: hidden;
-    margin: 0.5em 0;
-  }
-
   .movie-cover .date, .movie-cover .rating {
     padding: 0.5em 1em;
   }
 
   .movie-cover .actions a {
-    color: white;
     text-decoration: none;
     width: 100% ;
     display: inline-block;
@@ -226,9 +296,6 @@ function gotoDetailPage() {
     flex-wrap: wrap;
   }
 
-  .fav-buttons .fav {
-    color: #739ce7;
-  }
   .glowing::after{
     content: '';
     position: absolute;

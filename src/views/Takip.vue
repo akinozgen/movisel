@@ -11,7 +11,6 @@
                   :user-data="user"
                   :key="index+1" />
           </div>
-          <Loading v-else />
         </div>
       </div>
       <div class="half">
@@ -24,7 +23,6 @@
                   :user-data="user"
                   :key="(index+1)*2" />
           </div>
-          <Loading v-else />
         </div>
       </div>
     </div>
@@ -34,7 +32,6 @@
 <script setup>
 import AuthStore from "../stores/AuthStore";
 import User from "../components/User";
-import Loading from "../components/Loading";
 import { getUser } from "../helpers/authDataHelpers";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";

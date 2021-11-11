@@ -23,12 +23,14 @@ import {
     faPhotoVideo,
     faUsers,
     faUserPlus,
-    faUserMinus
+    faUserMinus,
+    faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb, faGithub } from '@fortawesome/free-brands-svg-icons';
 import TMDBStore from "./stores/TMDBStore";
 import AuthStore from "./stores/AuthStore";
+import './index.css';
 
 library.add(
     faSignOutAlt,
@@ -53,7 +55,8 @@ library.add(
     faUsers,
     faUserPlus,
     faUserMinus,
-    faGithub 
+    faGithub,
+    faCheck
 );
 
 createApp(App)

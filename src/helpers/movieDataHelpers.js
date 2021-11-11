@@ -4,7 +4,8 @@ export const castMovieToCover = ({ movieData, type }) => ({
     decimal_rating: movieData.vote_average,
     release_date: type === 'movie' ? movieData.release_date : movieData.first_air_date,
     poster_url: `https://image.tmdb.org/t/p/w500/${movieData.poster_path}`,
-    item_type: type
+    item_type: type,
+    short_desc: movieData.overview,
 });
 
 export const castMovieToDetailsPage = ({ movieData, type })  => {

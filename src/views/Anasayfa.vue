@@ -1,30 +1,39 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <h1 class="page-title">
-        Vizyondaki Popüler
-        <select v-model="type" v-on:change="changeType" class="type-select-header">
+  <div class="container mx-auto md:w-10/12 sm:w-full md:w-auto flex-wrap">
+    <div class="header flex align-middle justify-between mb-10 sm:flex-wrap md:flex-nowrap">
+      <div class="page-title mt-10 flex">
+        <h1 class="text-3xl font-bold sm:w-full md:w-auto">
+          Vizyondaki Popüler
+        </h1>
+        <select v-model="type"
+                v-on:change="changeType"
+                class="sm:w-full md:w-auto type-select-header ml-2 text-3xl border-b-2 border-indigo-300 mt-0.5 font-bold">
           <option :selected="type === 'movie'" v-bind:value="'movie'" :key="1">Filmler</option>
           <option :selected="type === 'tv'" v-bind:value="'tv'" :key="2">Diziler</option>
         </select>
-      </h1>
-      <div class="pagination small">
+      </div>
+      <div class="pagination small mt-5 sm:w-full md:w-auto">
         <button
-            class="paginate prev"
+            class="prev btn bg-neutral btn-circle btn-sm"
             v-bind:class="{ disabled: TMDBStore.state.activePage === 1 || isLoading }"
             @click="prevPage">
           <font-awesome-icon icon="caret-left"/>
         </button>
-        <span v-text="TMDBStore.state.activePage" class="active-page" @click="firstPage"></span>
+        
+        <button @click="firstPage"
+                class="btn pointer-events-none btn-circle btn-outline btn-sm mx-2 flex align-middle justify-center">
+          {{ TMDBStore.state.activePage }}
+        </button>
+
         <button
-            class="paginate next"
+            class="next btn bg-neutral btn-circle btn-sm"
             @click="nextPage"
             v-bind:class="{ disabled: TMDBStore.state.showcaseMaxPages === TMDBStore.state.activePage || isLoading }">
           <font-awesome-icon icon="caret-right"/>
         </button>
       </div>
     </div>
-    <div class="grid">
+    <div class="container flex flex-wrap align-text-top justify-between">
       <MovieCover
           v-bind:movie-data="movieData"
           v-for="movieData in TMDBStore.state.showcaseMovies"
@@ -128,7 +137,6 @@ async function loadShowcaseMovies() {
     margin: 0 1em;
     border-radius: 100px;
     border: 0;
-    background-color: #739ce7;
     cursor: pointer;
     color: white;
   }
@@ -143,7 +151,6 @@ async function loadShowcaseMovies() {
     font-size: 1.5em;
     width: 3rem;
     height: 3rem;
-    border: 2px solid #739ce7;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -175,14 +182,12 @@ async function loadShowcaseMovies() {
 
   .type-select-header {
     font-size: 1em;
-    border: 0;
     background-color: transparent;
     color: white;
     font-family: 'Alegreya Sans', sans-serif;
     font-weight: 600;
     -moz-appearance: none;
     -webkit-appearance: none;
-    border-bottom: 2px solid #739ce7;
     padding: 0 .5em;
   }
 

@@ -13,7 +13,13 @@ export default createStore({
         userFavs: [],
         userLists: [],
         userFollows: [],
-        userFollwed: []
+        userFollwed: [],
+        listsModalOpened: false,
+        addToListTarget: {
+            movieId: 0,
+            listIds: [],
+            type: null
+        }
     },
     mutations: {
         async login(state, _userData) {
@@ -237,20 +243,35 @@ export default createStore({
             ));
         },
 
-        async addToList(state, { item_id, list_id, item_type, movie_data }) {
-            const { error: insertError } = await dbInsert({
-                table: 'list_items',
-                data: { item_id, list_id, type: item_type, user_id: state.userData.id }
-            });
-            if (insertError) return;
+        async addToList(state, { selectedLists }) {
+            state.addToListTarget.listIds = selectedLists;
+            
+            state.addToListTarget.listIds.forEach(async (listId) => {
+                const { error: insertError } = await dbInsert({
+                    table: 'list_items',
+                    data: {
+                        item_id: state.addToListTarget.movieId,
+                        list_id: listId,
+                        type: state.addToListTarget.type,
+                        user_id: state.userData.id
+                    }
+                });
+                if (insertError) return;
 
-            let index = getIndexOf({
-                array: state.userLists,
-                key1: 'id',
-                key2: parseInt(list_id)
+                let index = getIndexOf({
+                    array: state.userLists,
+                    key1: 'id',
+                    key2: parseInt(listId)
+                });
+                if (!(typeof index === 'number' && index >= 0)) return;
             });
-            if (!(typeof index === 'number' && index >= 0)) return;
-            state.userLists[index].movies.push(movie_data);
+
+            state.addToListTarget = {
+                movieId: null,
+                type: null,
+                listIds: []
+            };
+            state.listsModalOpened = false;
         },
 
         async unfollow(state, { user_id, callback }) {
@@ -265,6 +286,32 @@ export default createStore({
                 .userFollows
                 .filter((f) => !(f.following === user_id && f.followed === state.userData.id));
             callback();
+        },
+
+        async openListsModal(state, { type, itemId}) {
+            state.addToListTarget = {
+                movieId: itemId,
+                type
+            };
+            /**
+             * AuthStore.commit('addToList', {
+    item_id: props.movieData.id,
+    list_id: listId,
+    item_type: props.movieData.item_type,
+    movie_data: props.movieData
+  });
+             */
+            state.listsModalOpened = true;
+        },
+
+        async closeListsModal(state) {
+            state.addToListTarget = {
+                movieId: null,
+                type: null,
+                listIds: []
+            };
+
+            state.listsModalOpened = false;
         }
     }
 });
