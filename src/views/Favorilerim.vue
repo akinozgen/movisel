@@ -14,7 +14,7 @@
 
 <script setup>
 import AuthStore from "@/stores/AuthStore";
-import MovieCover from "@/components/MovieCover";
+import MovieCover from "@/components/MovieCover.vue";
 import TMDBStore from "@/stores/TMDBStore";
 import router from "@/router";
 import { onMounted } from "@vue/runtime-core";

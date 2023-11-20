@@ -26,7 +26,7 @@
 
 <script setup>
 import AuthStore from "@/stores/AuthStore";
-import ListCover from "@/components/ListCover";
+import ListCover from "@/components/ListCover.vue";
 import router from "@/router";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";

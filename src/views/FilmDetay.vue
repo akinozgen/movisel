@@ -142,12 +142,12 @@ import 'vue3-carousel/dist/carousel.css';
 import '../styles/dropdown.css';
 
 import tmdbMovieStatuses from "@/helpers/tmdbMovieStatuses";
-import SeasonCover from "@/components/SeasonCover";
-import MovieCover from "@/components/MovieCover";
+import SeasonCover from "@/components/SeasonCover.vue";
+import MovieCover from "@/components/MovieCover.vue";
 import AuthStore from "@/stores/AuthStore";
 import TMDBStore from "@/stores/TMDBStore";
 import vLazyImage from 'v-lazy-image';
-import Cast from "@/components/Cast";
+import Cast from "@/components/Cast.vue";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Carousel, Slide, Navigation } from 'vue3-carousel';

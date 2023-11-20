@@ -62,9 +62,12 @@ import TMDBStore from "@/stores/TMDBStore";
 import MovieCover from "@/components/MovieCover.vue";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
+import { changeTitle } from "../helpers/titleHelper";
 
 const isLoading = ref(false);
 const type = ref('movie');
+const title = `Vizyondaki Popüler ${(type.value === 'movie' ? 'Filmler' : 'Diziler')}`;
+changeTitle(title);
 
 onMounted(() => {
   isLoading.value = false;
@@ -73,6 +76,9 @@ onMounted(() => {
 });
 
 async function changeType() {
+  const title = `Vizyondaki Popüler ${(type.value === 'movie' ? 'Filmler' : 'Diziler')}`;
+  changeTitle(title);
+
   await loadShowcaseMovies();
 }
 
