@@ -1,12 +1,12 @@
 import { createStore } from "vuex";
-import {castMovieToCover, castMovieToDetailsPage, getUserFavMovies} from "../helpers/movieDataHelpers";
+import {castMovieToCover, castMovieToDetailsPage, getUserFavMovies} from "@/helpers/movieDataHelpers";
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
 
 export default createStore({
     state: {
         showcaseMovies: [],
-        apiKey: process.env.VUE_APP_TMDB_API_KEY,
+        apiKey: import.meta.env.VITE_APP_TMDB_API_KEY,
         requestToken: '',
         sessionId: '',
         showcaseMaxPages: 1,

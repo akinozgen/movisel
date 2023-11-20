@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Anasayfa from "../views/Anasayfa";
+import Anasayfa from "@/views/Anasayfa.vue";
 
 const routes = [
   {
@@ -10,47 +10,46 @@ const routes = [
   {
     path: '/listelerim',
     name: 'Listelerim',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Listelerim')
+    component: () => import('@/views/Listelerim.vue')
   },
   {
     path: '/liste/:id',
     name: 'ListeDetay',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ListeDetay')
+    component: () => import('@/views/ListeDetay.vue')
   },
   {
     path: '/detay/:type/:id',
     name: 'FilmDetay',
-    component: () => import(/* webpackChunkName: "about" */ '../views/FilmDetay')
+    component: () => import('@/views/FilmDetay.vue')
   },
   {
     path: '/favorilerim',
     name: 'Favorilerim',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Favorilerim')
+    component: () => import('@/views/Favorilerim.vue')
   },
   {
     path: '/giris-yap',
     name: 'GirisYap',
-    component: () => import(/* webpackChunkName: "about" */ '../views/GirisYap')
+    component: () => import('@/views/GirisYap.vue')
   },
   {
     path: '/kayit-ol',
     name: 'KayitOl',
-    component: () => import(/* webpackChunkName: "about" */ '../views/KayitOl')
+    component: () => import('@/views/KayitOl.vue')
   },
   {
     path: '/cikis',
     name: 'Cikis',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Cikis')
+    component: () => import('@/views/Cikis.vue')
   },
   {
     path: '/takip',
     name: 'Takip',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Takip')
+    component: () => import('@/views/Takip.vue')
   },
 ]
-
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes
 })
 

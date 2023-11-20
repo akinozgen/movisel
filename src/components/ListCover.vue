@@ -33,9 +33,9 @@
 <script setup>
 import { defineProps } from 'vue';
 import vLazyImage from 'v-lazy-image';
-import AuthStore from "../stores/AuthStore";
+import AuthStore from "@/stores/AuthStore";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import router from "../router";
+import router from "@/router";
 import { ref } from "@vue/reactivity";
 
 const props = defineProps({

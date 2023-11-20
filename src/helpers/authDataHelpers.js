@@ -1,5 +1,5 @@
-import SupaBase from "../stores/SupaBase";
-import AuthStore from "../stores/AuthStore";
+import SupaBase from "@/stores/SupaBase";
+import AuthStore from "@/stores/AuthStore";
 
 export const getIndexOf = ({ array, key1, key2 }) => {
     return array.indexOf( array.filter((l) => l[key1] === key2)[0] );

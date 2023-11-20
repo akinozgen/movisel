@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import Header from "./components/Header";
-import Footer from "./components/Footer.vue";
-import ListsModal from "./components/ListsModal.vue";
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+import ListsModal from "@/components/ListsModal.vue";
 
 const appName = 'Movisel';
 </script>

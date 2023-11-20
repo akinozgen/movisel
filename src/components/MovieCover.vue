@@ -101,8 +101,8 @@
 <script setup>
   // movieData?.release_date -> releaseDateFormatted
 import vLazyImage from 'v-lazy-image';
-import AuthStore from "../stores/AuthStore";
-import router from "../router";
+import AuthStore from "@/stores/AuthStore";
+import router from "@/router";
 import { defineProps } from 'vue';
 
 const props = defineProps({

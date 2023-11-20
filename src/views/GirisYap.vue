@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="container">
     <h1 class="page-title">Giriş Yap</h1>
 
@@ -21,9 +21,9 @@
 </template>
 
 <script setup>
-import AuthStore from "../stores/AuthStore";
-import SupaBase from "../stores/SupaBase";
-import router from "../router";
+import AuthStore from "@/stores/AuthStore";
+import SupaBase from "@/stores/SupaBase";
+import router from "@/router";
 import { ref } from "@vue/reactivity";
 
 const email = ref("");

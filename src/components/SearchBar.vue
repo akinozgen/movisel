@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import TMDBStore from "../stores/TMDBStore";
+import TMDBStore from "@/stores/TMDBStore";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { ref } from "@vue/reactivity";
 

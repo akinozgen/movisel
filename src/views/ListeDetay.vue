@@ -17,9 +17,9 @@
 </template>
 
 <script setup>
-import AuthStore from "../stores/AuthStore";
-import MovieCover from "../components/MovieCover";
-import router from "../router";
+import AuthStore from "@/stores/AuthStore";
+import MovieCover from "@/components/MovieCover";
+import router from "@/router";
 import { computed } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 import { useRouter } from "vue-router";

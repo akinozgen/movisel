@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-import AuthStore from "../stores/AuthStore";
-import MovieCover from "../components/MovieCover";
-import TMDBStore from "../stores/TMDBStore";
-import router from "../router";
+import AuthStore from "@/stores/AuthStore";
+import MovieCover from "@/components/MovieCover";
+import TMDBStore from "@/stores/TMDBStore";
+import router from "@/router";
 import { onMounted } from "@vue/runtime-core";
 
 onMounted(() => {

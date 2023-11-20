@@ -58,8 +58,8 @@
 </template>
 
 <script setup>
-import TMDBStore from "../stores/TMDBStore";
-import MovieCover from "../components/MovieCover";
+import TMDBStore from "@/stores/TMDBStore";
+import MovieCover from "@/components/MovieCover.vue";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 

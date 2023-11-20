@@ -30,9 +30,9 @@
 </template>
 
 <script setup>
-import AuthStore from "../stores/AuthStore";
-import User from "../components/User";
-import { getUser } from "../helpers/authDataHelpers";
+import AuthStore from "@/stores/AuthStore";
+import User from "@/components/User";
+import { getUser } from "@/helpers/authDataHelpers";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 

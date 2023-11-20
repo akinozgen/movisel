@@ -28,8 +28,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faImdb, faGithub } from '@fortawesome/free-brands-svg-icons';
-import TMDBStore from "./stores/TMDBStore";
-import AuthStore from "./stores/AuthStore";
+import TMDBStore from "@/stores/TMDBStore";
+import AuthStore from "@/stores/AuthStore";
 import './index.css';
 
 library.add(

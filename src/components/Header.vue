@@ -34,8 +34,8 @@
 
 <script setup>
 import { defineProps } from 'vue';
-import AuthStore from "../stores/AuthStore";
-// import router from "../router";
+import AuthStore from "@/stores/AuthStore";
+// import router from "@/router";
 
 defineProps({
   branding: {

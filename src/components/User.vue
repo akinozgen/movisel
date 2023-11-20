@@ -26,9 +26,9 @@
 <script setup>
 import { defineProps } from 'vue';
 import vLazyImage from 'v-lazy-image';
-import {isFollowingUser} from "../helpers/authDataHelpers";
+import {isFollowingUser} from "@/helpers/authDataHelpers";
 import 'autolink-js';
-import AuthStore from "../stores/AuthStore";
+import AuthStore from "@/stores/AuthStore";
 
 const props = defineProps({
   userData: {

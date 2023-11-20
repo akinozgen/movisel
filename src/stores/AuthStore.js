@@ -1,8 +1,8 @@
 import {createStore} from "vuex";
 import SupaBase from "./SupaBase";
 import TMDBStore from "./TMDBStore";
-import {dbDelete, dbInsert, dbSelect, dbUpdate, getIndexOf} from "../helpers/authDataHelpers";
-import {castMovieToCover} from "../helpers/movieDataHelpers";
+import {dbDelete, dbInsert, dbSelect, dbUpdate, getIndexOf} from "@/helpers/authDataHelpers";
+import {castMovieToCover} from "@/helpers/movieDataHelpers";
 
 const apiEndpoint = 'https://api.themoviedb.org/3';
 
